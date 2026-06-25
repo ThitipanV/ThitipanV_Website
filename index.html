@@ -291,6 +291,7 @@
 
     /* PROJECTS */
     /* --- MASONRY LAYOUT --- */
+    /* --- MASONRY + OVERLAY EFFECT --- */
     .masonry-grid {
       column-count: 3;
       column-gap: 24px;
@@ -300,53 +301,64 @@
     .masonry-item {
       display: block;
       text-decoration: none;
-      color: var(--ink);
       break-inside: avoid;
-      margin-bottom: 48px;
+      margin-bottom: 24px; /* ปรับให้เท่ากับระยะห่างซ้ายขวา */
       cursor: pointer;
     }
 
     .masonry-image {
+      position: relative; /* สำคัญมาก: เพื่อให้ข้อความเกาะติดอยู่กับรูปนี้ */
       width: 100%;
       overflow: hidden;
-      margin-bottom: 16px; 
       background: #e8e5df;
     }
 
     .masonry-image img {
       width: 100%;
-      height: auto; /* หัวใจสำคัญที่ทำให้รูปไม่ถูกตัด และสูงตามสัดส่วนจริง */
+      height: auto;
       display: block;
       transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
 
+    /* ซูมรูปภาพตอนเอาเมาส์ชี้ */
     .masonry-item:hover .masonry-image img {
-      transform: scale(1.03);
+      transform: scale(1.04);
     }
 
-    .masonry-text {
-      text-align: left;
+    /* เอฟเฟกต์กล่องข้อความไล่สีแบบเดิม */
+    .project-info {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 28px 32px;
+      background: linear-gradient(transparent, rgba(26,24,20,0.8));
+      transform: translateY(8px);
+      transition: transform 0.3s;
     }
 
-    /* ปรับแต่งฟอนต์ให้ตรงกับสไตล์เดิมที่คุณชอบ */
-    .masonry-title {
+    /* ขยับข้อความขึ้นตอนเอาเมาส์ชี้ */
+    .masonry-item:hover .project-info { 
+      transform: translateY(0); 
+    }
+
+    /* ฟอนต์เดิมแบบที่คุณตั้งไว้ */
+    .project-name {
       font-family: var(--mono);
       font-size: 25px;
       font-weight: 300;
       letter-spacing: -0.01em;
-      margin-bottom: 6px;
-      color: var(--ink);
+      margin-bottom: 4px;
+      color: #f5f3ef;
     }
 
-    .masonry-tag {
+    .project-year {
       font-family: var(--serif);
       font-size: 13px;
-      opacity: 0.6;
+      opacity: 0.8;
       line-height: 1.4;
-      color: var(--ink);
+      color: #f5f3ef;
     }
 
-    /* --- การแสดงผลบนจอมือถือและแท็บเล็ต --- */
+    /* การแสดงผลบนจอมือถือและแท็บเล็ต */
     @media (max-width: 1024px) {
       .masonry-grid { column-count: 2; }
     }
@@ -544,40 +556,41 @@
     <a href="#" class="masonry-item">
       <div class="masonry-image">
         <img src="images/ROFP_3.png" alt="Reconstruct of Future Past">
-      </div>
-      <div class="masonry-text">
-        <h3 class="masonry-title">Reconstruct of Future Past</h3>
-        <p class="masonry-tag" style="text-transform: none; line-height: 1.4;">โครงการลวง, CMU ART CENTER, Chiang Mai University, Chiang Mai, Thailand</p>
+        
+        <div class="project-info">
+          <h3 class="project-name">Reconstruct of Future Past</h3>
+          <p class="project-year">โครงการลวง, CMU ART CENTER, Chiang Mai University</p>
+        </div>
       </div>
     </a>
 
     <a href="#" class="masonry-item">
       <div class="masonry-image">
         <img src="images/BTR.png" alt="Beyond The Relation">
-      </div>
-      <div class="masonry-text">
-        <h3 class="masonry-title">Beyond The Relation</h3>
-        <p class="masonry-tag" style="text-transform: none; line-height: 1.4;">A to F Exhibition, Media Arts and Design, Chiang Mai, Thailand</p>
+        <div class="project-info">
+          <h3 class="project-name">Beyond The Relation</h3>
+          <p class="project-year">A to F Exhibition, Media Arts and Design, Chiang Mai</p>
+        </div>
       </div>
     </a>
 
     <a href="#" class="masonry-item">
       <div class="masonry-image">
         <img src="images/Japan1.png" alt="STACK TOKYO Performance">
-      </div>
-      <div class="masonry-text">
-        <h3 class="masonry-title">STACK TOKYO Performance</h3>
-        <p class="masonry-tag" style="text-transform: none; line-height: 1.4;">Tokyo, Japan</p>
+        <div class="project-info">
+          <h3 class="project-name">STACK TOKYO Performance</h3>
+          <p class="project-year">Tokyo, Japan</p>
+        </div>
       </div>
     </a>
 
     <a href="#" class="masonry-item">
       <div class="masonry-image">
         <img src="images/impure1.png" alt="The Impure Air">
-      </div>
-      <div class="masonry-text">
-        <h3 class="masonry-title">The Impure Air</h3>
-        <p class="masonry-tag" style="text-transform: none; line-height: 1.4;">EZ: A Part Exhibition, Chiang Mai, Thailand</p>
+        <div class="project-info">
+          <h3 class="project-name">The Impure Air</h3>
+          <p class="project-year">EZ: A Part Exhibition, Chiang Mai, Thailand</p>
+        </div>
       </div>
     </a>
 
