@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Art Project — Thitipan Vimonpan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #ffffff;
+      --ink: #1a1814;
+      --muted: #8a8680;
+      --accent: #3963FE;
+      --line: rgba(26,24,20,0.12);
+      --serif: 'Instrument Serif', serif;
+      --mono: 'DM Mono', monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--serif);
+      font-weight: 300;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* Custom cursor */
+    .cursor {
+      width: 15px; height: 15px;
+      background: var(--bg);
+      border-radius: 50%;
+      position: fixed;
+      top: 0; left: 0;
+      pointer-events: none;
+      z-index: 9999;
+      mix-blend-mode: difference;
+      transition: ;
+    }
+    .cursor-ring {
+      width: 35px; height: 35px;
+      border: 2px solid var(--ink);
+      border-radius: 50%;
+      position: fixed;
+      top: 0; left: 0;
+      pointer-events: none;
+      z-index: 9998;
+      mix-blend-mode: difference;
+      transition: transform 0.2s ease, width 0.2s, height 0.3s, opacity 0.3s;
+      transform: translate(-12px, -12px);
+    }
+
+    /* ── NAV ── */
+   nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 28px 48px;
+      mix-blend-mode: multiply;
+    }
+
+    .nav-logo {
+      font-family: var(--mono);
+      font-size: 30px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--ink);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: var(--mono);
+      font-size: 20px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--ink); }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      padding: 160px 48px 80px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 40px;
+    }
+    .page-header-left {}
+    .page-eyebrow {
+      font-family: var(--mono); font-size: 13px;
+      letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 16px;
+      opacity: 0; animation: fadeUp 0.7s 0.2s forwards;
+    }
+    .page-title {
+      font-size: clamp(48px, 7vw, 88px);
+      font-weight: 300; line-height: 1.0;
+      letter-spacing: -0.02em;
+      opacity: 0; animation: fadeUp 0.8s 0.35s forwards;
+    }
+    .page-title em { font-style: italic; color: var(--muted); }
+    .page-count {
+      font-family: var(--mono); font-size: 11px;
+      letter-spacing: 0.2em; color: var(--muted);
+      opacity: 0; animation: fadeIn 0.8s 0.7s forwards;
+      align-self: flex-end;
+      padding-bottom: 8px;
+    }
+
+   
+
+    /* ── MASONRY ── */
+    .masonry-section { padding: 48px 48px 120px; }
+
+    .masonry {
+      columns: 3;
+      column-gap: 16px;
+    }
+
+    @media (max-width: 1000px) { .masonry { columns: 2; } }
+    @media (max-width: 600px) { .masonry { columns: 1; } }
+
+    .masonry-item {
+      break-inside: avoid;
+      margin-bottom: 16px;
+      position: relative;
+      overflow: hidden;
+      background: #f0ede8;
+      cursor: none;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .masonry-item.visible {
+      opacity: 1; transform: translateY(0);
+    }
+
+    .masonry-item img {
+      width: 100%; display: block;
+      transition: transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94);
+      filter: grayscale(0%);
+    }
+    .masonry-item:hover img { transform: scale(1.04); }
+
+    /* placeholder colored blocks when no image */
+    .masonry-placeholder {
+      width: 100%;
+      display: block;
+      background: var(--placeholder-color, #e0ddd8);
+      transition: transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    .masonry-item:hover .masonry-placeholder { transform: scale(1.04); }
+
+    .masonry-overlay {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 20px 20px 16px;
+      background: linear-gradient(transparent, rgba(26,24,20,0.72));
+      color: #f5f3ef;
+      opacity: 0;
+      transition: opacity 0.3s;
+      transform: translateY(4px);
+    }
+    .masonry-item:hover .masonry-overlay { opacity: 1; transform: translateY(0); }
+
+    .item-tag {
+      font-family: var(--mono); font-size: 14px;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      opacity: 0.6; margin-bottom: 4px;
+    }
+    .item-title { font-size: 20px; font-weight: 300; letter-spacing: -0.01em; }
+    .item-year {
+      font-family: var(--mono); font-size: 11px;
+      opacity: 0.4; margin-top: 3px;
+    }
+
+    /* top-left index number */
+    .item-index {
+      position: absolute; top: 12px; left: 14px;
+      font-family: var(--mono); font-size: 9px;
+      letter-spacing: 0.2em; color: rgba(245,243,239,0.5);
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .masonry-item:hover .item-index { opacity: 1; }
+
+    /* accent corner */
+    .item-corner {
+      position: absolute; bottom: -1px; right: -1px;
+      width: 0; height: 0;
+      border-left: 28px solid transparent;
+      border-bottom: 28px solid var(--accent);
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .masonry-item:hover .item-corner { opacity: 1; }
+
+    /* ── CONTACT / FOOTER (same as index) ── */
+    .contact { background: var(--accent); color: var(--bg); padding: 120px 48px; }
+    .contact .section-header { display: flex; align-items: baseline; gap: 24px; margin-bottom: 80px; }
+    .contact .section-num { font-family: var(--mono); font-size: 11px; color: var(--bg); letter-spacing: 0.2em; }
+    .contact .section-title { font-size: clamp(36px,5vw,60px); font-weight: 300; letter-spacing: -0.02em; }
+    .contact .section-line { flex:1; height:1px; background: rgba(245,243,239,0.15); margin-bottom: 4px; }
+
+    .contact-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .contact-headline { font-size: clamp(28px,3.5vw,46px); font-weight: 300; line-height: 1.2; letter-spacing: -0.02em; }
+    .contact-links { display: flex; flex-direction: column; }
+    .contact-link-item {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 22px 0; border-bottom: 1px solid rgba(245,243,239,0.1);
+      text-decoration: none; color: var(--bg);
+      transition: padding-left 0.3s;
+    }
+    .contact-link-item:hover { padding-left: 12px; }
+    .contact-link-label { font-family: var(--mono); font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.4; margin-bottom: 4px; }
+    .contact-link-value { font-size: 20px; }
+    .contact-arrow { font-size: 18px; }
+
+    footer {
+      background: var(--ink); color: rgba(245,243,239,0.3);
+      padding: 28px 48px; display: flex;
+      justify-content: space-between; align-items: center;
+      border-top: 1px solid rgba(245,243,239,0.06);
+    }
+    footer span { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity:0; transform: translateY(20px); }
+      to   { opacity:1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity:0; } to { opacity:1; }
+    }
+
+    /* ── REVEAL ── */
+    .reveal {
+      opacity: 0; transform: translateY(28px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .reveal.visible { opacity:1; transform: none; }
+
+    @media (max-width: 768px) {
+      nav { padding: 20px 24px; }
+      .page-header { padding: 120px 24px 60px; flex-direction: column; align-items: flex-start; }
+      .filter-bar { padding: 20px 24px; }
+      .masonry-section { padding: 32px 24px 80px; }
+      .contact { padding: 80px 24px; }
+      .contact-layout { grid-template-columns: 1fr; gap: 48px; }
+      footer { flex-direction: column; gap: 8px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="nav-logo">Thitipan Vimonpan</a>
+    <ul class="nav-links">
+      <li><a href="index.html#about">About</a></li>
+      <li><a href="art.html" class="active">Art Project</a></li>
+      <li><a href="design.html">Design Project</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- PAGE HEADER -->
+  <header class="page-header">
+    <div class="page-header-left">
+      <p class="page-eyebrow">Selected Works</p>
+      <h1 class="page-title">Art Project</h1>
+    </div>
+    <p class="page-count">08 works</p>
+  </header>
+
+
+  <!-- MASONRY GRID -->
+  <div class="masonry-section">
+    <div class="masonry" id="masonryGrid">
+
+      <!-- Item 1 — tall -->
+      <div class="masonry-item" data-category="thesis">
+        <div class="item-index">01</div>
+        <div class="masonry-placeholder" style="height:520px; --placeholder-color:#c8c2b8;"></div>
+        <div class="masonry-overlay">
+          <p class="item-tag">Thesis · 2025–2026</p>
+          <h3 class="item-title">Reconstruct of Future Past</h3>
+          <p class="item-year">Video Installation</p>
+        </div>
+        <div class="item-corner"></div>
+      </div>
+
+      <!-- Item 2 — medium -->
+      <div class="masonry-item" data-category="video-art">
+        <div class="item-index">02</div>
+        <div class="masonry-placeholder" style="height:340px; --placeholder-color:#dbd5cc;"></div>
+        <div class="masonry-overlay">
+          <p class="item-tag">Video Art · 2024</p>
+          <h3 class="item-title">Beyond The Relation</h3>
+          <p class="item-year">Single-channel Video</p>
+        </div>
+        <div class="item-corner"></div>
+      </div>
+
+      <!-- Item 3 — short -->
+      <div class="masonry-item" data-category="performance">
+        <div class="item-index">03</div>
+        <div class="masonry-placeholder" style="height:260px; --placeholder-color:#e8e3dc;"></div>
+        <div class="masonry-overlay">
+          <p class="item-tag">Performance · 2025</p>
+          <h3 class="item-title">STACK TOKYO</h3>
+          <p class="item-year">Audio-Visual Live Set</p>
+        </div>
+        <div class="item-corner"></div>
+      </div>
+
+      <!-- Item 4 — medium -->
+      <div class="masonry-item" data-category="installation">
+        <div class="item-index">04</div>
+        <div class="masonry-placeholder" style="height:380px; --placeholder-color:#b8b2a8;"></div>
+        <div class="masonry-overlay">
+          <p class="item-tag">Installation · 2026</p>
+          <h3 class="item-title">The Impure Air</h3>
+          <p class="item-year">Mixed Media</p>
+        </div>
+        <div class="item-corner"></div>
+      </div>
+
+      <!-- Item 5 — tall -->
+      <div class="masonry-item" data-category="video-art">
+        <div class="item-index">05</div>
+        <div class="masonry-placeholder" style="height:480px; --placeholder-color:#d4cfc8;"></div>
+        <div class="masonry-overlay">
+          <p class="item-tag">Video Art · 2024</p>
+          <h3 class="item-title">Latent Frequency</h3>
+          <p class="item-year">3-channel Video Loop</p>
+        </div>
+        <div class="item-corner"></div>
+      </div>
+
+      <!-- Item 6 — short -->
+      <div class="masonry-item" data-category="performance">
+        <div class="item-index">06</div>
+        <div class="masonry-placeholder" style="height:280px; --placeholder-color:#e0dbd4;"></div>
+        <div class="masonry-overlay">
+          <p class="item-tag">Performance · 2024</p>
+          <h3 class="item-title">Signal / Noise</h3>
+          <p class="item-year">Live Coding Performance</p>
+        </div>
+        <div class="item-corner"></div>
+      </div>
+
+      <!-- Item 7 — medium -->
+      <div class="masonry-item" data-category="installation">
+        <div class="item-index">07</div>
+        <div class="masonry-placeholder" style="height:360px; --placeholder-color:#ccc7c0;"></div>
+        <div class="masonry-overlay">
+          <p class="item-tag">Installation · 2025</p>
+          <h3 class="item-title">Hollow Ground</h3>
+          <p class="item-year">Spatial Sound + Light</p>
+        </div>
+        <div class="item-corner"></div>
+      </div>
+
+      <!-- Item 8 — short -->
+      <div class="masonry-item" data-category="video-art">
+        <div class="item-index">08</div>
+        <div class="masonry-placeholder" style="height:240px; --placeholder-color:#d8d2c8;"></div>
+        <div class="masonry-overlay">
+          <p class="item-tag">Video Art · 2023</p>
+          <h3 class="item-title">Unnamed Territory</h3>
+          <p class="item-year">Generative Video</p>
+        </div>
+        <div class="item-corner"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CONTACT -->
+   <section class="contact" id="contact">
+    <div class="section-header reveal">
+      <span class="section-num"></span>
+      <h2 class="section-title">Contact</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="contact-layout">
+      <div class="contact-headline reveal">
+        
+      </div>
+      <div class="contact-links reveal">
+        <a href="mailto:hello@yourname.com" class="contact-link-item">
+          <div>
+            <p class="contact-link-label">Email</p>
+            <p class="contact-link-value">Teard.v@gmail.com</p>
+          </div>
+          <span class="contact-arrow">→</span>
+        </a>
+        <a href="https://behance.net/yourprofile" target="_blank" class="contact-link-item">
+          <div>
+            <p class="contact-link-label">Telephone</p>
+            <p class="contact-link-value">+66 82 767 5916</p>
+          </div>
+          <span class="contact-arrow">→</span>
+        </a>
+        <a href="https://www.instagram.com/ttthitipan_v/" target="_blank" class="contact-link-item">
+          <div>
+            <p class="contact-link-label">Instagram</p>
+            <p class="contact-link-value">@TTThitipan_V</p>
+          </div>
+          <span class="contact-arrow">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span>© 2026 Thitipan Vimonpan. All rights reserved</span>
+    <span>Such is Life</span>
+  </footer>
+
+
+  <script>
+    // Cursor
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('cursorRing');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      cursor.style.transform = `translate(${mx - 5}px, ${my - 5}px)`;
+    });
+
+    function animateRing() {
+      rx += (mx - rx - 16) * 0.12;
+      ry += (my - ry - 16) * 0.12;
+      ring.style.transform = `translate(${rx}px, ${ry}px)`;
+      requestAnimationFrame(animateRing);
+    }
+    animateRing();
+
+    document.querySelectorAll('a, button').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        ring.style.width = '48px'; ring.style.height = '48px'; ring.style.opacity = '0.5';
+      });
+      el.addEventListener('mouseleave', () => {
+        ring.style.width = '32px'; ring.style.height = '32px'; ring.style.opacity = '1';
+      });
+    });
+
+    // Filter
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const items = document.querySelectorAll('.masonry-item');
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const f = btn.dataset.filter;
+        items.forEach(item => {
+          const match = f === 'all' || item.dataset.category === f;
+          item.style.opacity = match ? '1' : '0.2';
+          item.style.pointerEvents = match ? 'auto' : 'none';
+        });
+      });
+    });
+
+    // Scroll reveal — masonry items staggered
+    const revealEls = document.querySelectorAll('.reveal');
+    const masonryItems = document.querySelectorAll('.masonry-item');
+
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.1 });
+
+    revealEls.forEach(el => io.observe(el));
+
+    const io2 = new IntersectionObserver(entries => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => { e.target.classList.add('visible'); }, i * 80);
+          io2.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.05 });
+
+    masonryItems.forEach(el => io2.observe(el));
+  </script>
+</body>
+</html>
