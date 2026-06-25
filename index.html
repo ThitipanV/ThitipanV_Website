@@ -290,78 +290,68 @@
     }
 
     /* PROJECTS */
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2px;
+    /* --- MASONRY LAYOUT --- */
+    .masonry-grid {
+      column-count: 3;
+      column-gap: 24px;
+      padding: 0;
     }
 
-    .project-card {
-      position: relative;
-      aspect-ratio: 4/5;
-      overflow: hidden;
-      background: #e8e5df;
+    .masonry-item {
+      display: block;
+      text-decoration: none;
+      color: var(--ink);
+      break-inside: avoid;
+      margin-bottom: 48px;
       cursor: pointer;
     }
 
-    .project-card:first-child {
-      grid-column: span 2;
-      aspect-ratio: auto;
-      min-height: 480px;
+    .masonry-image {
+      width: 100%;
+      overflow: hidden;
+      margin-bottom: 16px; 
+      background: #e8e5df;
     }
 
-    .project-bg {
-      position: absolute;
-      inset: 0;
+    .masonry-image img {
+      width: 100%;
+      height: auto; /* หัวใจสำคัญที่ทำให้รูปไม่ถูกตัด และสูงตามสัดส่วนจริง */
+      display: block;
       transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
 
-    .project-card:hover .project-bg { transform: scale(1.04); }
-
-
-    .project-pattern {
-      position: absolute;
-      inset: 0;
-      background-size: cover; 
-      background-position: center;
-      background-repeat: no-repeat;
-      opacity: 1; 
-      transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);}
-
-    .project-card:hover .project-pattern {  transform: scale(1.04); }
-
-    .project-info {
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      padding: 28px 32px;
-      background: linear-gradient(transparent, rgba(26,24,20,0.7));
-      color: #f5f3ef;
-      transform: translateY(8px);
-      transition: transform 0.3s;
-    }
-    .project-card:hover .project-info { transform: translateY(0); }
-
-    .project-tag {
-      font-family: var(--mono);
-      font-size: 15px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      opacity: 0.7;
-      margin-bottom: 8px;
+    .masonry-item:hover .masonry-image img {
+      transform: scale(1.03);
     }
 
-    .project-name {
+    .masonry-text {
+      text-align: left;
+    }
+
+    /* ปรับแต่งฟอนต์ให้ตรงกับสไตล์เดิมที่คุณชอบ */
+    .masonry-title {
       font-family: var(--mono);
       font-size: 25px;
       font-weight: 300;
       letter-spacing: -0.01em;
+      margin-bottom: 6px;
+      color: var(--ink);
     }
 
-    .project-year {
+    .masonry-tag {
       font-family: var(--serif);
       font-size: 13px;
-      opacity: 0.5;
-      margin-top: 4px;
+      opacity: 0.6;
+      line-height: 1.4;
+      color: var(--ink);
+    }
+
+    /* --- การแสดงผลบนจอมือถือและแท็บเล็ต --- */
+    @media (max-width: 1024px) {
+      .masonry-grid { column-count: 2; }
+    }
+    @media (max-width: 768px) {
+      .masonry-grid { column-count: 1; }
     }
 
     /* CONTACT */
@@ -542,51 +532,57 @@
 </section>
 
   <!-- PROJECTS -->
-  <section id="projects">
-    <div class="section-header reveal">
-      <span class="section-num">02</span>
-      <h2 class="section-title">Selected Work</h2>
-      <div class="section-line"></div>
-    </div>
-    <div class="projects-grid reveal">
-      <div class="project-card p1">
-        <div class="project-bg"></div>
-        <div class="project-pattern" style="background-image: url('images/ROFP_3.png');"></div>
-        <div class="project-info">
-          <p class="project-tag"></p>
-          <h3 class="project-name">Reconstruct of  Future Past</h3>
-          <p class="project-year">โครงการลวง, CMU ART CENTER, Chiang Mai University, Chiang Mai, Thailand</p>
-        </div>
+ <section id="projects">
+  <div class="section-header reveal">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Selected Work</h2>
+    <div class="section-line"></div>
+  </div>
+  
+  <div class="masonry-grid reveal">
+    
+    <a href="#" class="masonry-item">
+      <div class="masonry-image">
+        <img src="images/ROFP_3.png" alt="Reconstruct of Future Past">
       </div>
-      <div class="project-card p2">
-        <div class="project-bg"></div>
-        <div class="project-pattern" style="background-image: url('images/BTR.png');"></div>
-        <div class="project-info">
-          <p class="project-tag"></p>
-          <h3 class="project-name">Beyond The Relation</h3>
-          <p class="project-year">A to F Exhibition, Media Arts and Design, Chiang Mai, Thailand</p>
-        </div>
+      <div class="masonry-text">
+        <h3 class="masonry-title">Reconstruct of Future Past</h3>
+        <p class="masonry-tag" style="text-transform: none; line-height: 1.4;">โครงการลวง, CMU ART CENTER, Chiang Mai University, Chiang Mai, Thailand</p>
       </div>
-      <div class="project-card p3">
-        <div class="project-bg"></div>
-        <div class="project-pattern" style="background-image: url('images/Japan1.png');"></div>
-        <div class="project-info">
-          <p class="project-tag"></p>
-          <h3 class="project-name">STACK TOKYO Performance</h3>
-          <p class="project-year">Tokyo, Japan </p>
-        </div>
+    </a>
+
+    <a href="#" class="masonry-item">
+      <div class="masonry-image">
+        <img src="images/BTR.png" alt="Beyond The Relation">
       </div>
-      <div class="project-card p4">
-        <div class="project-bg"></div>
-        <div class="project-pattern" style="background-image: url('images/impure1.png');"></div>
-        <div class="project-info">
-          <p class="project-tag"></p>
-          <h3 class="project-name">The Impure Air</h3>
-          <p class="project-year">EZ: A Part Exhibition, Chiang Mai, Thailand</p>
-        </div>
+      <div class="masonry-text">
+        <h3 class="masonry-title">Beyond The Relation</h3>
+        <p class="masonry-tag" style="text-transform: none; line-height: 1.4;">A to F Exhibition, Media Arts and Design, Chiang Mai, Thailand</p>
       </div>
-    </div>
-  </section>
+    </a>
+
+    <a href="#" class="masonry-item">
+      <div class="masonry-image">
+        <img src="images/Japan1.png" alt="STACK TOKYO Performance">
+      </div>
+      <div class="masonry-text">
+        <h3 class="masonry-title">STACK TOKYO Performance</h3>
+        <p class="masonry-tag" style="text-transform: none; line-height: 1.4;">Tokyo, Japan</p>
+      </div>
+    </a>
+
+    <a href="#" class="masonry-item">
+      <div class="masonry-image">
+        <img src="images/impure1.png" alt="The Impure Air">
+      </div>
+      <div class="masonry-text">
+        <h3 class="masonry-title">The Impure Air</h3>
+        <p class="masonry-tag" style="text-transform: none; line-height: 1.4;">EZ: A Part Exhibition, Chiang Mai, Thailand</p>
+      </div>
+    </a>
+
+  </div>
+</section>
 
   <!-- CONTACT -->
   <section class="contact" id="contact">
