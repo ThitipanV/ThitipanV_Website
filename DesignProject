@@ -238,8 +238,8 @@
     <a href="index.html" class="nav-logo">Thitipan Vimonpan</a>
     <ul class="nav-links">
       <li><a href="index.html#about">About</a></li>
-      <li><a href="art.html">Art Project</a></li>
-      <li><a href="design.html" class="active">Design Project</a></li>
+      <li><a href="ArtProject">Art Project</a></li>
+      <li><a href="DesignProject" class="active">Design Project</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
   </nav>
