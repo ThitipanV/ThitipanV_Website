@@ -104,7 +104,7 @@
       overflow: hidden;
       
       /* ใส่รูปพื้นหลังเต็มจอตรงนี้ */
-      background-image: url('images/01.JPG'); /* เปลี่ยนชื่อไฟล์รูปของคุณ */
+      background-image: url('images/01.JPG'); 
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
@@ -206,6 +206,7 @@
     }
 
     .section-title {
+      font-family: var(--mono);
       font-size: clamp(36px, 5vw, 60px);
       font-weight: 300;
       letter-spacing: -0.02em;
@@ -223,40 +224,69 @@
 
     .about-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 80px;
+      /* แบ่งเป็น 3 ส่วน: รูปเล็ก (1 ส่วน) : ข้อความ (1.5 ส่วน) : ข้อมูลขวาสุด (2 ส่วน) */
+      grid-template-columns: 1fr 1.5fr 2fr;
+      gap: 48px;
       align-items: start;
     }
 
+    .about-image {
+      width: 100%;
+      aspect-ratio: 3/4; /* สัดส่วนรูปแนวตั้ง */
+      overflow: hidden;
+      background: #e8e5df;
+    }
+
+    .about-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
     .about-body {
-      font-size: 25px;
-      line-height: 1.8;
+      font-size: 22px; /* ปรับขนาดฟอนต์ลงนิดหน่อยเพื่อไม่ให้เบียดกันเกินไป */
+      line-height: 1.6;
       color: var(--muted);
     }
 
-    .about-body strong { color: var(--ink); font-weight: 400; }
-
-    .about-details { padding-top: 8px; }
+    .about-details { padding-top: 0; }
 
     .detail-row {
       display: flex;
       justify-content: space-between;
-      align-items: baseline;
-      padding: 18px 0;
+      align-items: flex-start; /* จัดให้อยู่ชิดบนเผื่อข้อความหลายบรรทัด */
+      padding: 16px 0;
       border-bottom: 1px solid var(--line);
+      gap: 24px;
     }
 
     .detail-label {
       font-family: var(--mono);
-      font-size: 15px;
+      font-size: 12px; /* ปรับขนาดให้พอดีกับพื้นที่ใหม่ */
       letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--muted);
+      flex-shrink: 0; /* ป้องกันไม่ให้หัวข้อถูกบีบ */
     }
 
     .detail-value {
-      font-size: 20px;
+      font-size: 16px; /* ปรับขนาดให้เป็นระเบียบเมื่อมีหลายบรรทัด */
       color: var(--ink);
+      line-height: 1.4;
+    }
+
+    /* การแสดงผลบนจอมือถือและแท็บเล็ต */
+    @media (max-width: 1024px) {
+      .about-grid {
+        grid-template-columns: 1fr 1fr; /* กลับไปเป็น 2 คอลัมน์บนแท็บเล็ต */
+      }
+      .about-image { display: none; /* ซ่อนรูปบนจอเล็กเพื่อประหยัดพื้นที่ */ }
+    }
+    
+    @media (max-width: 768px) {
+      .about-grid { grid-template-columns: 1fr; }
+      .detail-row { flex-direction: column; gap: 8px; }
+      .detail-value { text-align: left !important; }
     }
 
     /* PROJECTS */
@@ -321,13 +351,14 @@
     }
 
     .project-name {
+      font-family: var(--mono);
       font-size: 25px;
       font-weight: 300;
       letter-spacing: -0.01em;
     }
 
     .project-year {
-      font-family: var(--mono);
+      font-family: var(--serif);
       font-size: 13px;
       opacity: 0.5;
       margin-top: 4px;
