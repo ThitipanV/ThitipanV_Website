@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Art Project — Thitipan Vimonpan</title>
+  <link rel="icon" type="image/png" href="images/favicon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Datatype:wght@100..900&display=swap" rel="stylesheet" />
@@ -102,6 +103,7 @@
 
     /* ── PAGE HEADER ── */
     .page-header {
+      font-family: var(--mono);
       padding: 160px 48px 80px;
       border-bottom: 1px solid var(--line);
       display: flex;
@@ -191,10 +193,20 @@
       letter-spacing: 0.22em; text-transform: uppercase;
       opacity: 0.6; margin-bottom: 4px;
     }
-    .item-title { font-size: 20px; font-weight: 300; letter-spacing: -0.01em; }
+    .item-title { 
+      font-family: var(--mono); /* เปลี่ยนเป็น Datatype */
+      font-size: 25px; /* ขนาดเท่าหน้าแรก */
+      font-weight: 300; 
+      letter-spacing: -0.01em; 
+      margin-bottom: 4px;
+    }
+    
     .item-year {
-      font-family: var(--mono); font-size: 11px;
-      opacity: 0.4; margin-top: 3px;
+      font-family: var(--serif); /* ใช้ฟอนต์อ่านง่ายสำหรับรายละเอียด */
+      font-size: 13px; /* ขนาดเท่าหน้าแรก */
+      opacity: 0.8; /* ปรับให้สว่างขึ้นนิดนึง */
+      line-height: 1.4;
+      margin-top: 3px;
     }
 
     /* top-left index number */
@@ -206,19 +218,15 @@
     }
     .masonry-item:hover .item-index { opacity: 1; }
 
-    /* accent corner */
-    .item-corner {
-      position: absolute; bottom: -1px; right: -1px;
-      width: 0; height: 0;
-      border-left: 28px solid transparent;
-      border-bottom: 28px solid var(--accent);
-      opacity: 0; transition: opacity 0.3s;
-    }
-    .masonry-item:hover .item-corner { opacity: 1; }
 
     /* ── CONTACT / FOOTER (same as index) ── */
     .contact { background: var(--accent); color: var(--bg); padding: 120px 48px; }
-    .contact .section-header { display: flex; align-items: baseline; gap: 24px; margin-bottom: 80px; }
+    .contact .section-title { 
+      font-family: var(--mono); 
+      font-size: clamp(36px,5vw,60px); 
+      font-weight: 300; 
+      letter-spacing: -0.02em; 
+    }
     .contact .section-num { font-family: var(--mono); font-size: 11px; color: var(--bg); letter-spacing: 0.2em; }
     .contact .section-title { font-size: clamp(36px,5vw,60px); font-weight: 300; letter-spacing: -0.02em; }
     .contact .section-line { flex:1; height:1px; background: rgba(245,243,239,0.15); margin-bottom: 4px; }
@@ -456,7 +464,7 @@
           <h3 class="item-title">Reconstruct of Future Past</h3>
           <p class="item-year">โครงการลวง, CMU ART CENTER, Chiang Mai University, Chiang Mai, Thailand</p>
         </div>
-        <div class="item-corner"></div>
+     
       </div>
 
       <!-- Item 2 — medium -->
@@ -468,7 +476,7 @@
           <h3 class="item-title">Beyond The Relation</h3>
           <p class="item-year">A-F Exhibition, Media Arts and Design, Chiang Mai, Thailand </p>
         </div>
-        <div class="item-corner"></div>
+       
       </div>
 
       <!-- Item 3 — short -->
@@ -480,7 +488,7 @@
           <h3 class="item-title">STACK TOKYO Live Performance</h3>
           <p class="item-year">Tokyo, Japan </p>
         </div>
-        <div class="item-corner"></div>
+     
       </div>
 
       <!-- Item 4 — medium -->
@@ -492,7 +500,7 @@
           <h3 class="item-title">The Impure Air</h3>
           <p class="item-year">EZ: A Part Exhibition</p>
         </div>
-        <div class="item-corner"></div>
+       
       </div>
 
       <!-- Item 5 — tall -->
@@ -504,7 +512,7 @@
           <h3 class="item-title">Sucktoria Robonova</h3>
           <p class="item-year">Viyogenesis Exhibition, Media Arts and Design, Chiang Mai, Thailand</p>
         </div>
-        <div class="item-corner"></div>
+       
       </div>
 
 
