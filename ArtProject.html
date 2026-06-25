@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Art Project — Thitipan Vimonpan</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Datatype:wght@100..900&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Datatype:wght@100..900&display=swap" rel="stylesheet" />
   <style>
     :root {
       --bg: #ffffff;
@@ -13,7 +14,7 @@
       --muted: #8a8680;
       --accent: #3963FE;
       --line: rgba(26,24,20,0.12);
-      --serif: 'Instrument Serif', serif;
+      --serif: 'IBM Plex Sans', 'IBM Plex Sans Thai', sans-serif;
       --mono: 'Datatype', monospace;
     }
 
@@ -27,6 +28,13 @@
       font-weight: 300;
       overflow-x: hidden;
       cursor: none;
+      /* always reserve scrollbar space → no layout jump when panel opens */
+      scrollbar-gutter: stable;
+    }
+    body.panel-open {
+      overflow-y: hidden;
+      /* fallback for browsers that don't support scrollbar-gutter */
+      padding-right: var(--sb-width, 0px);
     }
 
     /* Custom cursor */
@@ -262,6 +270,151 @@
       .contact-layout { grid-template-columns: 1fr; gap: 48px; }
       footer { flex-direction: column; gap: 8px; text-align: center; }
     }
+
+    /* ══════════════════════════════
+       SIDE PANEL
+    ══════════════════════════════ */
+    .panel-backdrop {
+      position: fixed; inset: 0;
+      background: rgba(26,24,20,0.45);
+      z-index: 200;
+      opacity: 0; pointer-events: none;
+      /* use will-change so compositor layer is ready, avoid repaint */
+      will-change: opacity;
+      transition: opacity 0.35s ease;
+      /* NO backdrop-filter — causes heavy repaint → jank */
+    }
+    .panel-backdrop.open { opacity: 1; pointer-events: all; }
+
+    .side-panel {
+      position: fixed; top: 0; right: 0; bottom: 0;
+      width: min(500px, 92vw);
+      background: var(--bg);
+      z-index: 201;
+      transform: translateX(100%);
+      /* will-change promotes to compositor layer — no main-thread jank */
+      will-change: transform;
+      transition: transform 0.48s cubic-bezier(0.16,1,0.3,1);
+      display: flex; flex-direction: column;
+      overflow: hidden;
+      box-shadow: -4px 0 32px rgba(26,24,20,0.10);
+    }
+    .side-panel.open { transform: translateX(0); }
+
+    /* left accent bar */
+    .side-panel::before {
+      content: '';
+      position: absolute; top: 0; left: 0; bottom: 0;
+      width: 2px; background: var(--accent); z-index: 1;
+    }
+
+    /* close button */
+    .panel-close {
+      position: absolute; top: 20px; right: 20px;
+      width: 36px; height: 36px;
+      border: 1px solid var(--line);
+      background: var(--bg); cursor: none;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--muted); font-size: 16px;
+      font-family: var(--mono);
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+      z-index: 2;
+    }
+    .panel-close:hover { border-color: var(--ink); color: var(--ink); }
+
+    /* ── main image ── */
+    .panel-img-wrap {
+      width: 100%; aspect-ratio: 4/3;
+      overflow: hidden; flex-shrink: 0;
+      position: relative; background: #e8e4de;
+    }
+    .panel-img-wrap img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+    .panel-img-placeholder {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--ph, #d4cfc8);
+    }
+    .panel-img-placeholder span {
+      font-family: var(--mono); font-size: 10px;
+      letter-spacing: 0.28em; text-transform: uppercase;
+      color: rgba(26,24,20,0.22);
+    }
+    .panel-index-badge {
+      position: absolute; top: 14px; left: 14px;
+      font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em;
+      background: var(--accent); color: #fff;
+      padding: 4px 10px;
+    }
+
+    /* ── scrollable body ── */
+    .panel-body {
+      flex: 1; overflow-y: auto;
+      padding: 32px 36px 40px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--line) transparent;
+    }
+
+    .panel-tag {
+      font-family: var(--mono); font-size: 10px;
+      letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 10px;
+    }
+    .panel-title {
+      font-family: var(--serif);
+      font-size: clamp(22px, 3vw, 30px);
+      font-weight: 400; line-height: 1.15;
+      letter-spacing: -0.01em; margin-bottom: 6px;
+    }
+    .panel-year {
+      font-family: var(--mono); font-size: 11px;
+      letter-spacing: 0.18em; color: var(--muted);
+      margin-bottom: 24px;
+    }
+    .panel-divider {
+      height: 1px; background: var(--line); margin-bottom: 24px;
+    }
+    .panel-desc {
+      font-family: var(--serif);
+      font-size: 15px; line-height: 1.85;
+      color: var(--muted); margin-bottom: 32px;
+    }
+    .panel-desc strong { color: var(--ink); font-weight: 500; }
+
+    /* ── extra images 2-up grid ── */
+    .panel-extra-imgs {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 8px; margin-bottom: 8px;
+    }
+    .panel-extra-img {
+      aspect-ratio: 1; overflow: hidden;
+    }
+    .panel-extra-img img { width:100%; height:100%; object-fit:cover; display:block; }
+    .panel-extra-img-ph {
+      width:100%; height:100%;
+      display:flex; align-items:center; justify-content:center;
+      background: var(--ph2, #d8d2c8);
+    }
+    .panel-extra-img-ph span {
+      font-family: var(--mono); font-size: 9px;
+      letter-spacing: 0.2em; color: rgba(26,24,20,0.2);
+    }
+
+    /* ── optional link ── */
+    .panel-link {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-family: var(--mono); font-size: 10px;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--ink); text-decoration: none;
+      border-bottom: 1px solid var(--ink); padding-bottom: 2px;
+      margin-top: 28px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .panel-link:hover { color: var(--accent); border-color: var(--accent); }
+
+    /* masonry items — pointer cursor hint */
+    .masonry-item { cursor: none; }
   </style>
 </head>
 <body>
@@ -393,6 +546,44 @@
     </div>
   </div>
 
+  <!-- PANEL BACKDROP -->
+  <div class="panel-backdrop" id="panelBackdrop"></div>
+
+  <!-- SIDE PANEL -->
+  <aside class="side-panel" id="sidePanel" role="dialog" aria-modal="true" aria-label="Project detail">
+    <button class="panel-close" id="panelClose" aria-label="Close panel">✕</button>
+
+    <!-- Main image -->
+    <div class="panel-img-wrap">
+      <div class="panel-img-placeholder" id="panelImgPh"><span>No image yet</span></div>
+      <img id="panelImg" src="" alt="" style="display:none; position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
+      <div class="panel-index-badge" id="panelBadge">01</div>
+    </div>
+
+    <!-- Scrollable content -->
+    <div class="panel-body">
+      <p class="panel-tag"  id="panelTag">—</p>
+      <h2 class="panel-title" id="panelTitle">—</h2>
+      <p class="panel-year" id="panelYear">—</p>
+      <div class="panel-divider"></div>
+      <p class="panel-desc" id="panelDesc">—</p>
+
+      <!-- Extra images (2-up) -->
+      <div class="panel-extra-imgs" id="panelExtra">
+        <div class="panel-extra-img" id="panelEx1">
+          <div class="panel-extra-img-ph" style="--ph2:#d4cec8"><span>img 2</span></div>
+        </div>
+        <div class="panel-extra-img" id="panelEx2">
+          <div class="panel-extra-img-ph" style="--ph2:#ccc7c0"><span>img 3</span></div>
+        </div>
+      </div>
+
+      <a href="#" class="panel-link" id="panelLink" style="display:none;">
+        View Full Project <span>→</span>
+      </a>
+    </div>
+  </aside>
+
   <!-- CONTACT -->
    <section class="contact" id="contact">
     <div class="section-header reveal">
@@ -438,52 +629,189 @@
 
 
   <script>
-    // Cursor
+    /* ── CURSOR ── */
     const cursor = document.getElementById('cursor');
-    const ring = document.getElementById('cursorRing');
+    const ring   = document.getElementById('cursorRing');
     let mx = 0, my = 0, rx = 0, ry = 0;
 
     document.addEventListener('mousemove', e => {
       mx = e.clientX; my = e.clientY;
-      cursor.style.transform = `translate(${mx - 5}px, ${my - 5}px)`;
+      cursor.style.transform = `translate(${mx - 7}px, ${my - 7}px)`;
     });
-
     function animateRing() {
-      rx += (mx - rx - 16) * 0.12;
-      ry += (my - ry - 16) * 0.12;
+      rx += (mx - rx - 17) * 0.12;
+      ry += (my - ry - 17) * 0.12;
       ring.style.transform = `translate(${rx}px, ${ry}px)`;
       requestAnimationFrame(animateRing);
     }
     animateRing();
 
     document.querySelectorAll('a, button').forEach(el => {
-      el.addEventListener('mouseenter', () => {
-        ring.style.width = '48px'; ring.style.height = '48px'; ring.style.opacity = '0.5';
-      });
-      el.addEventListener('mouseleave', () => {
-        ring.style.width = '32px'; ring.style.height = '32px'; ring.style.opacity = '1';
+      el.addEventListener('mouseenter', () => { ring.style.width='52px'; ring.style.height='52px'; ring.style.opacity='0.5'; });
+      el.addEventListener('mouseleave', () => { ring.style.width='35px'; ring.style.height='35px'; ring.style.opacity='1'; });
+    });
+
+    /* ── PROJECT DATA ──
+       ใส่ข้อมูลแต่ละงานตรงนี้
+       imgSrc     : path รูปหลัก  เช่น 'images/work1.jpg'  (ถ้าไม่มีลบบรรทัดนี้ออก)
+       imgEx1/2   : path รูปเพิ่มเติม 2 รูปด้านล่าง
+       showExtra  : true = แสดงช่องรูปด้านล่าง, false = ซ่อน
+       link       : URL ถ้าต้องการปุ่ม "View Full Project"
+    ── */
+    const projects = {
+      '01': {
+        tag:  'Thesis · 2025–2026',
+        title:'Reconstruct of Future Past',
+        year: 'Video Installation',
+        desc: 'A thesis work exploring the tension between memory and anticipation. The piece constructs a speculative archaeology — assembling fragments of imagined futures that feel already past.',
+        imgPlaceholderColor: '#c8c2b8',
+        imgSrc: 'images/ROFP_3.png',
+        showExtra: true,
+        imgEx1: 'images/ROFP_5.png',
+        imgEx2: 'images/ROFP_2.png',
+        imgEx3: 'images/ROFP_4.png',
+      },
+      '02': {
+        tag:  'Video Art · 2024',
+        title:'Beyond The Relation',
+        year: 'Single-channel Video',
+        desc: 'A meditation on the invisible bonds between objects, bodies, and environments. Recorded across three cities, the video layers ambient sound with long-exposure imagery.',
+        imgPlaceholderColor: '#dbd5cc',
+        showExtra: true,
+      },
+      '03': {
+        tag:  'Performance · 2025',
+        title:'STACK TOKYO',
+        year: 'Audio-Visual Live Set',
+        desc: 'A live audio-visual performance combining modular synthesis with real-time generative visuals. Performed at STACK TOKYO as part of the international residency programme.',
+        imgPlaceholderColor: '#e8e3dc',
+        showExtra: false,
+      },
+      '04': {
+        tag:  'Installation · 2026',
+        title:'The Impure Air',
+        year: 'Mixed Media',
+        desc: 'An immersive installation examining industrial pollution and bodily perception. Visitors move through a fog-filled space responsive to real-time air quality data.',
+        imgPlaceholderColor: '#b8b2a8',
+        showExtra: true,
+      },
+      '05': {
+        tag:  'Video Art · 2024',
+        title:'Latent Frequency',
+        year: '3-channel Video Loop',
+        desc: 'Three screens display parallel timelines of the same location recorded at different hours. The piece investigates how light and duration alter spatial memory.',
+        imgPlaceholderColor: '#d4cfc8',
+        showExtra: true,
+      },
+      '06': {
+        tag:  'Performance · 2024',
+        title:'Signal / Noise',
+        year: 'Live Coding Performance',
+        desc: 'A live-coded audio-visual set written entirely in SuperCollider and GLSL shaders. The code is projected alongside the output, making the process part of the performance.',
+        imgPlaceholderColor: '#e0dbd4',
+        showExtra: false,
+      },
+      '07': {
+        tag:  'Installation · 2025',
+        title:'Hollow Ground',
+        year: 'Spatial Sound + Light',
+        desc: 'A spatial sound installation using 8-channel audio and programmable LED strips to map sonic territories in a disused industrial hall.',
+        imgPlaceholderColor: '#ccc7c0',
+        showExtra: true,
+      },
+      '08': {
+        tag:  'Video Art · 2023',
+        title:'Unnamed Territory',
+        year: 'Generative Video',
+        desc: 'An early exploration into generative imagery — using ComfyUI pipelines to produce landscapes that reference no real geography, only internal cartography.',
+        imgPlaceholderColor: '#d8d2c8',
+        showExtra: false,
+      },
+    };
+
+    /* ── PANEL ELEMENTS ── */
+    const backdrop  = document.getElementById('panelBackdrop');
+    const panel     = document.getElementById('sidePanel');
+    const closeBtn  = document.getElementById('panelClose');
+    const panelBadge= document.getElementById('panelBadge');
+    const panelTag  = document.getElementById('panelTag');
+    const panelTitle= document.getElementById('panelTitle');
+    const panelYear = document.getElementById('panelYear');
+    const panelDesc = document.getElementById('panelDesc');
+    const panelExtra= document.getElementById('panelExtra');
+    const panelEx1  = document.getElementById('panelEx1');
+    const panelEx2  = document.getElementById('panelEx2');
+    const panelLink = document.getElementById('panelLink');
+    const panelImg  = document.getElementById('panelImg');
+    const panelImgPh= document.getElementById('panelImgPh');
+
+    function openPanel(id) {
+      const d = projects[id];
+      if (!d) return;
+
+      panelBadge.textContent = id;
+      panelTag.textContent   = d.tag;
+      panelTitle.textContent = d.title;
+      panelYear.textContent  = d.year;
+      panelDesc.innerHTML    = d.desc;
+
+      /* main image */
+      if (d.imgSrc) {
+        panelImg.src = d.imgSrc;
+        panelImg.style.display = 'block';
+        panelImgPh.style.display = 'none';
+      } else {
+        panelImg.style.display = 'none';
+        panelImgPh.style.display = 'flex';
+        panelImgPh.style.setProperty('--ph', d.imgPlaceholderColor || '#d4cfc8');
+      }
+
+      /* extra images */
+      panelExtra.style.display = d.showExtra ? 'grid' : 'none';
+      if (d.showExtra) {
+        panelEx1.innerHTML = d.imgEx1
+          ? `<img src="${d.imgEx1}" alt="">`
+          : `<div class="panel-extra-img-ph" style="--ph2:#d4cec8"><span>img 2</span></div>`;
+        panelEx2.innerHTML = d.imgEx2
+          ? `<img src="${d.imgEx2}" alt="">`
+          : `<div class="panel-extra-img-ph" style="--ph2:#ccc7c0"><span>img 3</span></div>`;
+      }
+
+      /* link */
+      panelLink.style.display = d.link ? 'inline-flex' : 'none';
+      if (d.link) panelLink.href = d.link;
+
+      /* measure scrollbar width BEFORE hiding scroll — prevents layout jump */
+      const sbWidth = window.innerWidth - document.documentElement.clientWidth;
+      document.documentElement.style.setProperty('--sb-width', sbWidth + 'px');
+
+      document.body.classList.add('panel-open');
+      backdrop.classList.add('open');
+      panel.classList.add('open');
+      panel.querySelector('.panel-body').scrollTop = 0;
+    }
+
+    function closePanel() {
+      backdrop.classList.remove('open');
+      panel.classList.remove('open');
+      document.body.classList.remove('panel-open');
+      document.documentElement.style.setProperty('--sb-width', '0px');
+    }
+
+    closeBtn.addEventListener('click', closePanel);
+    backdrop.addEventListener('click', closePanel);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closePanel(); });
+
+    /* attach click to every masonry card */
+    document.querySelectorAll('.masonry-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const id = item.querySelector('.item-index')?.textContent?.trim();
+        if (id) openPanel(id);
       });
     });
 
-    // Filter
-    const filterBtns = document.querySelectorAll('.filter-btn');
-    const items = document.querySelectorAll('.masonry-item');
-
-    filterBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        filterBtns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        const f = btn.dataset.filter;
-        items.forEach(item => {
-          const match = f === 'all' || item.dataset.category === f;
-          item.style.opacity = match ? '1' : '0.2';
-          item.style.pointerEvents = match ? 'auto' : 'none';
-        });
-      });
-    });
-
-    // Scroll reveal — masonry items staggered
-    const revealEls = document.querySelectorAll('.reveal');
+    /* ── SCROLL REVEAL ── */
+    const revealEls   = document.querySelectorAll('.reveal');
     const masonryItems = document.querySelectorAll('.masonry-item');
 
     const io = new IntersectionObserver(entries => {
@@ -491,18 +819,16 @@
         if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
       });
     }, { threshold: 0.1 });
-
     revealEls.forEach(el => io.observe(el));
 
     const io2 = new IntersectionObserver(entries => {
       entries.forEach((e, i) => {
         if (e.isIntersecting) {
-          setTimeout(() => { e.target.classList.add('visible'); }, i * 80);
+          setTimeout(() => e.target.classList.add('visible'), i * 80);
           io2.unobserve(e.target);
         }
       });
     }, { threshold: 0.05 });
-
     masonryItems.forEach(el => io2.observe(el));
   </script>
 </body>
