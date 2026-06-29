@@ -426,6 +426,13 @@
 
     /* masonry items — pointer cursor hint */
     .masonry-item { cursor: none; }
+
+    .panel-extra-img video {
+  width: 100%;
+  aspect-ratio: 16 / 9; 
+  object-fit: contain;  
+  background: #000;     
+}
   </style>
 </head>
 <body>
@@ -683,11 +690,15 @@
           mediaList.forEach(item => {
             const mediaContainer = document.createElement('div');
             mediaContainer.className = 'panel-extra-img';
-            if (item.type === 'video') {
-              mediaContainer.innerHTML = `<video width="100%" controls playsinline style="display:block;"><source src="${item.src}" type="video/mp4"></video>`;
-            } else {
-              mediaContainer.innerHTML = `<img src="${item.src}" alt="">`;
-            }
+            
+              if (item.type === 'video') {
+            mediaContainer.innerHTML = `
+              <video width="100%" controls playsinline>
+                <source src="${item.src}" type="video/mp4">
+              </video>`;
+          } else {
+            mediaContainer.innerHTML = `<img src="${item.src}" alt="">`;
+          }
             panelExtra.appendChild(mediaContainer);
           });
         } else {
