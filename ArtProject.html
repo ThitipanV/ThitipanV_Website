@@ -589,10 +589,10 @@
                desc: '&emsp;&emsp;A live audio-visual performance combining modular synthesis with real-time generative visuals. Performed at WPÜ HOTEL, Tokyo, Japan.', 
                imgPlaceholderColor: '#e8e3dc', 
                imgSrc: 'images/Japan1.png', 
-               showExtra: true },
+               showExtra: true ,
                extraMedia: [
               { type: 'image', src: 'images/Japan2.png' },
-              { type: 'video', src: 'videos/Japanvid1.MOV' } 
+              { type: 'video', src: 'videos/Japanvid1.mov'} 
             ]
           },
         '04': { tag: '2024', 
@@ -638,30 +638,32 @@
       const panelImg = document.getElementById('panelImg');
       const panelImgPh = document.getElementById('panelImgPh');
 
-      window.openPanel = function(id) { // ใส่ window. เพื่อให้ฟังก์ชันถูกเรียกใช้จากภายนอกได้
+     window.openPanel = function(id) {
         const d = projects[id];
         if (!d) return;
+
         panelBadge.textContent = id;
         panelTag.textContent = d.tag;
         panelTitle.textContent = d.title;
         panelYear.textContent = d.year;
         panelDesc.innerHTML = d.desc;
         
+        // --- ปุ่มลิงก์ (อันนี้อันเดียวพอ ไม่ต้องมีอันล่าง) ---
         if (d.youtubeLink) {
-    panelLink.style.display = 'inline-flex';
-    panelLink.href = d.youtubeLink;
-    panelLink.target = '_blank'; 
-    panelLink.querySelector('span').textContent = 'Watch on YouTube →';
-  } else if (d.link) {
-    panelLink.style.display = 'inline-flex';
-    panelLink.href = d.link;
-    panelLink.target = '_self';
-    panelLink.querySelector('span').textContent = 'View Full Project →';
-  } else {
-    panelLink.style.display = 'none';
-  }
+          panelLink.style.display = 'inline-flex';
+          panelLink.href = d.youtubeLink;
+          panelLink.target = '_blank'; 
+          panelLink.querySelector('span').textContent = 'Watch on YouTube →';
+        } else if (d.link) {
+          panelLink.style.display = 'inline-flex';
+          panelLink.href = d.link;
+          panelLink.target = '_self';
+          panelLink.querySelector('span').textContent = 'View Full Project →';
+        } else {
+          panelLink.style.display = 'none';
+        }
         
-        
+        // --- รูปภาพหลัก ---
         if (d.imgSrc) {
           panelImg.src = d.imgSrc;
           panelImg.style.display = 'block';
@@ -671,29 +673,27 @@
           panelImgPh.style.display = 'flex';
           panelImgPh.style.setProperty('--ph', d.imgPlaceholderColor || '#d4cfc8');
         }
-       panelExtra.innerHTML = '';
-      
-      if (d.extraMedia && d.extraMedia.length > 0) {
-        panelExtra.style.display = 'grid';
-        d.extraMedia.forEach(item => {
-          const mediaContainer = document.createElement('div');
-          mediaContainer.className = 'panel-extra-img'; // ใช้ class เดิมเพื่อให้จัด layout ได้เหมือนกัน
 
-          if (item.type === 'video') {
-            mediaContainer.innerHTML = `
-              <video width="100%" controls playsinline style="display:block;">
-                <source src="${item.src}" type="video/mp4">
-              </video>`;
-          } else {
-            mediaContainer.innerHTML = `<img src="${item.src}" alt="">`;
-          }
-          panelExtra.appendChild(mediaContainer);
-        });
-      } else {
-        panelExtra.style.display = 'none';
-      }
-        panelLink.style.display = d.link ? 'inline-flex' : 'none';
-        if (d.link) panelLink.href = d.link;
+        // --- extraMedia (ที่รวมภาพและวิดีโอ) ---
+        panelExtra.innerHTML = '';
+        const mediaList = d.extraMedia || d.extraImages || []; // รองรับทั้งชื่อ extraMedia และ extraImages
+        
+        if (mediaList.length > 0) {
+          panelExtra.style.display = 'grid';
+          mediaList.forEach(item => {
+            const mediaContainer = document.createElement('div');
+            mediaContainer.className = 'panel-extra-img';
+            if (item.type === 'video') {
+              mediaContainer.innerHTML = `<video width="100%" controls playsinline style="display:block;"><source src="${item.src}" type="video/mp4"></video>`;
+            } else {
+              mediaContainer.innerHTML = `<img src="${item.src}" alt="">`;
+            }
+            panelExtra.appendChild(mediaContainer);
+          });
+        } else {
+          panelExtra.style.display = 'none';
+        }
+
         const sbWidth = window.innerWidth - document.documentElement.clientWidth;
         document.documentElement.style.setProperty('--sb-width', sbWidth + 'px');
         document.body.classList.add('panel-open');
