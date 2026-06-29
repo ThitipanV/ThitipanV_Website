@@ -546,16 +546,7 @@
       <p class="panel-desc" id="panelDesc">—</p>
 
       <!-- Extra images (2-up) -->
-      <div class="panel-extra-imgs" id="panelExtra">
-        <div class="panel-extra-img" id="panelEx1">
-          <div class="panel-extra-img-ph" style="--ph2:#d4cec8"><span>img 2</span></div>
-        </div>
-        <div class="panel-extra-img" id="panelEx2">
-          <div class="panel-extra-img-ph" style="--ph2:#ccc7c0"><span>img 3</span></div>
-        </div>
-        <div class="panel-extra-img" id="panelEx3">
-          <div class="panel-extra-img-ph" style="--ph2:#ccc7c0"><span>img 4</span></div>
-        </div>
+     <div class="panel-extra-imgs" id="panelExtra">
       </div>
 
       <a href="#" class="panel-link" id="panelLink" style="display:none;">
@@ -738,15 +729,23 @@ This work explores the ethics of de-extinction and questions human agency in int
         panelImgPh.style.setProperty('--ph', d.imgPlaceholderColor || '#d4cfc8');
       }
 
-      /* extra images */
-      panelExtra.style.display = d.showExtra ? 'grid' : 'none';
-      if (d.showExtra) {
-        panelEx1.innerHTML = d.imgEx1
-          ? `<img src="${d.imgEx1}" alt="">`
-          : `<div class="panel-extra-img-ph" style="--ph2:#d4cec8"><span>img 2</span></div>`;
-        panelEx2.innerHTML = d.imgEx2
-          ? `<img src="${d.imgEx2}" alt="">`
-          : `<div class="panel-extra-img-ph" style="--ph2:#ccc7c0"><span>img 3</span></div>`;
+      /* ── extra images แบบวนลูปดึงตามจำนวนจริง ── */
+      const panelExtra = document.getElementById('panelExtra');
+      panelExtra.innerHTML = ''; // ล้างรูปภาพของงานเก่าออกให้หมดก่อน
+
+      // เช็คว่างานนี้มีรูปใน extraImages มั้ย และมีกี่รูป
+      if (d.extraImages && d.extraImages.length > 0) {
+        panelExtra.style.display = 'grid'; // เปิดการแสดงผลกล่องแม่
+        
+        // วนลูปสร้างกล่องรูปภาพตามจำนวนรูปที่มีจริงใน Array
+        d.extraImages.forEach(imgUrl => {
+          const imgContainer = document.createElement('div');
+          imgContainer.className = 'panel-extra-img';
+          imgContainer.innerHTML = `<img src="${imgUrl}" alt="">`;
+          panelExtra.appendChild(imgContainer); // พ่นรูปภาพเข้าไปในหน้าเว็บ
+        });
+      } else {
+        panelExtra.style.display = 'none'; // ถ้างงานไหนไม่มีรูปเพิ่มเติม ให้ซ่อนกล่องนี้ไปเลย
       }
 
       /* link */
