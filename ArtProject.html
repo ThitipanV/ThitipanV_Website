@@ -453,41 +453,27 @@
     <p class="page-count">08 works</p>
   </header>
 
-
 <div class="masonry-section">
-    <div class="masonry" id="masonryGrid">
-      </div>
+    <div class="masonry" id="masonryGrid"></div>
   </div>
 
-  <!-- PANEL BACKDROP -->
   <div class="panel-backdrop" id="panelBackdrop"></div>
 
-  <!-- SIDE PANEL -->
   <aside class="side-panel" id="sidePanel" role="dialog" aria-modal="true" aria-label="Project detail">
     <button class="panel-close" id="panelClose" aria-label="Close panel">✕</button>
-
-    <!-- Main image -->
     <div class="panel-img-wrap">
       <div class="panel-img-placeholder" id="panelImgPh"><span>No image yet</span></div>
       <img id="panelImg" src="" alt="" style="display:none; position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
       <div class="panel-index-badge" id="panelBadge">01</div>
     </div>
-
-    <!-- Scrollable content -->
     <div class="panel-body">
-      <p class="panel-tag"  id="panelTag">—</p>
+      <p class="panel-tag" id="panelTag">—</p>
       <h2 class="panel-title" id="panelTitle">—</h2>
       <p class="panel-year" id="panelYear">—</p>
       <div class="panel-divider"></div>
       <p class="panel-desc" id="panelDesc">—</p>
-
-      <!-- Extra images (2-up) -->
-     <div class="panel-extra-imgs" id="panelExtra">
-      </div>
-
-      <a href="#" class="panel-link" id="panelLink" style="display:none;">
-        View Full Project <span>→</span>
-      </a>
+      <div class="panel-extra-imgs" id="panelExtra"></div>
+      <a href="#" class="panel-link" id="panelLink" style="display:none;">View Full Project <span>→</span></a>
     </div>
   </aside>
 
@@ -536,200 +522,101 @@
 
 
   <script>
-    /* ── CURSOR ── */
-    const cursor = document.getElementById('cursor');
-    const ring   = document.getElementById('cursorRing');
-    let mx = 0, my = 0, rx = 0, ry = 0;
+    document.addEventListener("DOMContentLoaded", function() {
+      /* ── 1. PROJECT DATA ── */
+      const projects = {
+        '01': { tag: '2026', title:'Reconstruct of Future Past', year: 'Multiple Screening', desc: `&emsp;&emsp;...`, imgPlaceholderColor: '#c8c2b8', imgSrc: 'images/ROFP_3.png', showExtra: true, extraImages: ['images/ROFP_2.png', 'images/ROFP_4.png', 'images/ROFP_5.png', 'images/Reconstruct 1.png'] },
+        '02': { tag: '2026', title:'The Impure Air', year: 'Mixed Media', desc: '...', imgPlaceholderColor: '#b8b2a8', imgSrc: 'images/impure1.png', showExtra: true, extraImages: ['images/Impure2.jpg', 'images/Impure3.jpg', 'images/Impure4.jpg'] },
+        '03': { tag: '2025', title:'STACK TOKYO PERFORMANCE', year: 'Audio-Visual Live Performance', desc: '...', imgPlaceholderColor: '#e8e3dc', imgSrc: 'images/Japan1.png', showExtra: false },
+        '04': { tag: '2024', title:'Beyond The Relation', year: 'Video Art', desc: '...', imgPlaceholderColor: '#dbd5cc', imgSrc: 'images/BTR.png', showExtra: false },
+        '05': { tag: '2024', title:'Sucktoria Robonova', year: 'Interactive Art', desc: '', imgPlaceholderColor: '#d4cfc8', imgSrc: 'images/Sucktoria.png', showExtra: false }
+      };
 
-    document.addEventListener('mousemove', e => {
-      mx = e.clientX; my = e.clientY;
-      cursor.style.transform = `translate(${mx - 7}px, ${my - 7}px)`;
-    });
-    function animateRing() {
-      rx += (mx - rx - 17) * 0.12;
-      ry += (my - ry - 17) * 0.12;
-      ring.style.transform = `translate(${rx}px, ${ry}px)`;
-      requestAnimationFrame(animateRing);
-    }
-    animateRing();
-
-    document.querySelectorAll('a, button').forEach(el => {
-      el.addEventListener('mouseenter', () => { ring.style.width='52px'; ring.style.height='52px'; ring.style.opacity='0.5'; });
-      el.addEventListener('mouseleave', () => { ring.style.width='35px'; ring.style.height='35px'; ring.style.opacity='1'; });
-    });
-
-    /* ── PROJECT DATA ──
-       ใส่ข้อมูลแต่ละงานตรงนี้
-       imgSrc     : path รูปหลัก  เช่น 'images/work1.jpg'  (ถ้าไม่มีลบบรรทัดนี้ออก)
-       imgEx1/2   : path รูปเพิ่มเติม 2 รูปด้านล่าง
-       showExtra  : true = แสดงช่องรูปด้านล่าง, false = ซ่อน
-       link       : URL ถ้าต้องการปุ่ม "View Full Project"
-    ── */
-    const projects = {
-      '01': {
-        tag:  '2026',
-        title:'Reconstruct of Future Past',
-        year: 'Multiple Screening',
-        desc: `&emsp;&emsp;In a future Anthropocene era where human activities have irrevocably impacted the global ecosystem, much of life has gone extinct, leaving only small, scattered groups of humans. Ancient lifeforms are resurrected through de-extinction, returning to a new world in forms different from what was once imagined, with the goal of restoring the collapsed biosphere.<br><br>&emsp;&emsp;However, this intervention only compounds the problem, giving rise to a synthetic nature—a new ecological state that humanity can no longer control. The role of the creator is thus shifted to that of an observer, witnessing the very changes they have caused.<br><br>&emsp;&emsp;This work explores the ethics of de-extinction and questions human agency in intervening in natural processes that have already concluded, leading to a world where the line between the natural and the artificial has been irrevocably blurred.`,
-        imgPlaceholderColor: '#c8c2b8',
-        imgSrc: 'images/ROFP_3.png',
-        showExtra: true,
-        extraImages: [
-          'images/ROFP_2.png',
-          'images/ROFP_4.png',
-          'images/ROFP_5.png',
-          'images/Reconstruct 1.png',  
-        ]
-      },
-      '02': {
-        tag:  '2024',
-        title:'Beyond The Relation',
-        year: 'Video Art',
-        desc: 'A meditation on the invisible bonds between objects, bodies, and environments. Recorded across three cities, the video layers ambient sound with long-exposure imagery.',
-        imgPlaceholderColor: '#dbd5cc',
-        imgSrc: 'images/BTR.png',
-        showExtra: false,
-      },
-      '03': {
-        tag:  '2025',
-        title:'STACK TOKYO PERFORMANCE',
-        year: 'Audio-Visual Live Performance',
-        desc: '&emsp;&emsp;A live audio-visual performance combining modular synthesis with real-time generative visuals. Performed at WPÜ HOTEL, Tokyo, Japan.',
-        imgPlaceholderColor: '#e8e3dc',
-        imgSrc: 'images/Japan1.png',
-        showExtra: false,
-      },
-      '04': {
-        tag:  '2026',
-        title:'The Impure Air',
-        year: 'Mixed Media',
-        desc: "&emsp;&emsp;An exploration of the PM2.5 crisis in Chiang Mai province, characterized by consistently hazardous pollution levels. The work addresses how this environmental threat impacts the livelihood of locals and causes annual chronic health issues. Furthermore, it serves as a critique of the government's systemic failure in crisis management and its inability to implement sustainable solutions.",
-        imgPlaceholderColor: '#b8b2a8',
-        imgSrc: 'images/impure1.png',
-        showExtra: true,
-        extraImages: [
-          'images/Impure2.jpg',
-          'images/Impure3.jpg',
-          'images/Impure4.jpg',
-        ]
-      },
-      '05': {
-        tag:  '2024',
-        title:'Sucktoria Robonova',
-        year: 'Interactive Art',
-        desc: '',
-        imgPlaceholderColor: '#d4cfc8',
-        imgSrc: 'images/Sucktoria.png',
-        showExtra: false,
-      },
-    };
-
-    /* ── เครื่องจักรสร้างการ์ดผลงานอัตโนมัติ ── */
-    const grid = document.getElementById('masonryGrid');
-    // แปลง object projects ให้กลายเป็นรายการ array แล้ววนลูป
-    Object.keys(projects).forEach(id => {
-      const work = projects[id];
-      const item = document.createElement('div');
-      item.className = 'masonry-item reveal';
-      
-      const imageHTML = work.imgSrc 
-        ? `<img src="${work.imgSrc}" alt="${work.title}" style="width: 100%; height: auto; display: block;">`
-        : `<div class="masonry-placeholder" style="height:380px; --placeholder-color:${work.imgPlaceholderColor};"></div>`;
-
-      item.innerHTML = `
-        <div class="item-index">${id}</div>
-        ${imageHTML}
-        <div class="masonry-overlay">
-          <p class="item-tag">${work.tag}</p>
-          <h3 class="item-title">${work.title}</h3>
-          <p class="item-year">${work.year}</p>
-        </div>
-        <div class="item-corner"></div>
-      `;
-
-      item.addEventListener('click', () => openPanel(id));
-      grid.appendChild(item);
-    });
-    
-    /* ── PANEL ELEMENTS ── */
-    const backdrop  = document.getElementById('panelBackdrop');
-    const panel     = document.getElementById('sidePanel');
-    const closeBtn  = document.getElementById('panelClose');
-    const panelBadge= document.getElementById('panelBadge');
-    const panelTag  = document.getElementById('panelTag');
-    const panelTitle= document.getElementById('panelTitle');
-    const panelYear = document.getElementById('panelYear');
-    const panelDesc = document.getElementById('panelDesc');
-    const panelExtra= document.getElementById('panelExtra');
-    const panelLink = document.getElementById('panelLink');
-    const panelImg  = document.getElementById('panelImg');
-    const panelImgPh= document.getElementById('panelImgPh');
-
-    function openPanel(id) {
-      const d = projects[id];
-      if (!d) return;
-
-      panelBadge.textContent = id;
-      panelTag.textContent   = d.tag;
-      panelTitle.textContent = d.title;
-      panelYear.textContent  = d.year;
-      panelDesc.innerHTML    = d.desc;
-
-      /* main image */
-      if (d.imgSrc) {
-        panelImg.src = d.imgSrc;
-        panelImg.style.display = 'block';
-        panelImgPh.style.display = 'none';
-      } else {
-        panelImg.style.display = 'none';
-        panelImgPh.style.display = 'flex';
-        panelImgPh.style.setProperty('--ph', d.imgPlaceholderColor || '#d4cfc8');
-      }
-
-      /* extra images */
-      panelExtra.innerHTML = '';
-      if (d.extraImages && d.extraImages.length > 0) {
-        panelExtra.style.display = 'grid';
-        d.extraImages.forEach(imgUrl => {
-          const imgContainer = document.createElement('div');
-          imgContainer.className = 'panel-extra-img';
-          imgContainer.innerHTML = `<img src="${imgUrl}" alt="">`;
-          panelExtra.appendChild(imgContainer);
-        });
-      } else {
-        panelExtra.style.display = 'none';
-      }
-
-      panelLink.style.display = d.link ? 'inline-flex' : 'none';
-      if (d.link) panelLink.href = d.link;
-
-      const sbWidth = window.innerWidth - document.documentElement.clientWidth;
-      document.documentElement.style.setProperty('--sb-width', sbWidth + 'px');
-
-      document.body.classList.add('panel-open');
-      backdrop.classList.add('open');
-      panel.classList.add('open');
-      panel.querySelector('.panel-body').scrollTop = 0;
-    }
-
-    function closePanel() {
-      backdrop.classList.remove('open');
-      panel.classList.remove('open');
-      document.body.classList.remove('panel-open');
-      document.documentElement.style.setProperty('--sb-width', '0px');
-    }
-
-    closeBtn.addEventListener('click', closePanel);
-    backdrop.addEventListener('click', closePanel);
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') closePanel(); });
-
-    /* ── SCROLL REVEAL (ต้องรันหลังจากสร้างการ์ดเสร็จแล้ว) ── */
-    const revealEls = document.querySelectorAll('.reveal');
-    const io = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+      /* ── 2. BUILD MASONRY ── */
+      const grid = document.getElementById('masonryGrid');
+      Object.keys(projects).forEach(id => {
+        const work = projects[id];
+        const item = document.createElement('div');
+        item.className = 'masonry-item reveal';
+        const imageHTML = work.imgSrc ? `<img src="${work.imgSrc}" alt="${work.title}" style="width:100%; height:auto; display:block;">` : `<div class="masonry-placeholder" style="height:380px; --placeholder-color:${work.imgPlaceholderColor};"></div>`;
+        item.innerHTML = `<div class="item-index">${id}</div>${imageHTML}<div class="masonry-overlay"><p class="item-tag">${work.tag}</p><h3 class="item-title">${work.title}</h3><p class="item-year">${work.year}</p></div><div class="item-corner"></div>`;
+        item.addEventListener('click', () => openPanel(id));
+        grid.appendChild(item);
       });
-    }, { threshold: 0.1 });
-    revealEls.forEach(el => io.observe(el));
+
+      /* ── 3. PANEL ELEMENTS ── */
+      const backdrop = document.getElementById('panelBackdrop');
+      const panel = document.getElementById('sidePanel');
+      const closeBtn = document.getElementById('panelClose');
+      const panelBadge = document.getElementById('panelBadge');
+      const panelTag = document.getElementById('panelTag');
+      const panelTitle = document.getElementById('panelTitle');
+      const panelYear = document.getElementById('panelYear');
+      const panelDesc = document.getElementById('panelDesc');
+      const panelExtra = document.getElementById('panelExtra');
+      const panelLink = document.getElementById('panelLink');
+      const panelImg = document.getElementById('panelImg');
+      const panelImgPh = document.getElementById('panelImgPh');
+
+      window.openPanel = function(id) { // ใส่ window. เพื่อให้ฟังก์ชันถูกเรียกใช้จากภายนอกได้
+        const d = projects[id];
+        if (!d) return;
+        panelBadge.textContent = id;
+        panelTag.textContent = d.tag;
+        panelTitle.textContent = d.title;
+        panelYear.textContent = d.year;
+        panelDesc.innerHTML = d.desc;
+        if (d.imgSrc) {
+          panelImg.src = d.imgSrc;
+          panelImg.style.display = 'block';
+          panelImgPh.style.display = 'none';
+        } else {
+          panelImg.style.display = 'none';
+          panelImgPh.style.display = 'flex';
+          panelImgPh.style.setProperty('--ph', d.imgPlaceholderColor || '#d4cfc8');
+        }
+        panelExtra.innerHTML = '';
+        if (d.extraImages && d.extraImages.length > 0) {
+          panelExtra.style.display = 'grid';
+          d.extraImages.forEach(imgUrl => {
+            const imgContainer = document.createElement('div');
+            imgContainer.className = 'panel-extra-img';
+            imgContainer.innerHTML = `<img src="${imgUrl}" alt="">`;
+            panelExtra.appendChild(imgContainer);
+          });
+        } else {
+          panelExtra.style.display = 'none';
+        }
+        panelLink.style.display = d.link ? 'inline-flex' : 'none';
+        if (d.link) panelLink.href = d.link;
+        const sbWidth = window.innerWidth - document.documentElement.clientWidth;
+        document.documentElement.style.setProperty('--sb-width', sbWidth + 'px');
+        document.body.classList.add('panel-open');
+        backdrop.classList.add('open');
+        panel.classList.add('open');
+        panel.querySelector('.panel-body').scrollTop = 0;
+      };
+
+      function closePanel() {
+        backdrop.classList.remove('open');
+        panel.classList.remove('open');
+        document.body.classList.remove('panel-open');
+        document.documentElement.style.setProperty('--sb-width', '0px');
+      }
+
+      closeBtn.addEventListener('click', closePanel);
+      backdrop.addEventListener('click', closePanel);
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') closePanel(); });
+
+      /* ── 4. SCROLL REVEAL ── */
+      const revealEls = document.querySelectorAll('.reveal');
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+        });
+      }, { threshold: 0.1 });
+      revealEls.forEach(el => io.observe(el));
+    });
+  </script>
 </body>
 </html>
