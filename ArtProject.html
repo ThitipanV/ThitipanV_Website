@@ -392,21 +392,24 @@
 
     /* ── extra images 2-up grid ── */
     .panel-extra-imgs {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 8px; margin-bottom: 8px;
+      display: grid; 
+      grid-template-columns: 1fr; /* เปลี่ยนเป็น 1fr เพื่อให้มีแค่ 1 คอลัมน์ (เรียง 1 รูปต่อแถว) */
+      gap: 24px; /* เพิ่มระยะห่างระหว่างรูปบน-ล่างให้ดูสบายตาขึ้น */
+      margin-bottom: 24px;
     }
+
     .panel-extra-img {
-      aspect-ratio: 1; overflow: hidden;
+      width: 100%; /* ให้รูปขยายกว้างเต็มพื้นที่แผงด้านข้าง */
+      height: auto; /* ปรับความสูงอัตโนมัติตามสัดส่วนภาพจริง */
+      overflow: hidden;
+      
     }
-    .panel-extra-img img { width:100%; height:100%; object-fit:cover; display:block; }
-    .panel-extra-img-ph {
-      width:100%; height:100%;
-      display:flex; align-items:center; justify-content:center;
-      background: var(--ph2, #d8d2c8);
-    }
-    .panel-extra-img-ph span {
-      font-family: var(--mono); font-size: 9px;
-      letter-spacing: 0.2em; color: rgba(26,24,20,0.2);
+
+    .panel-extra-img img { 
+      width: 100%; 
+      height: auto; /* ให้รูปแสดงผลเต็มใบไม่ถูกครอป */
+      object-fit: cover; 
+      display: block; 
     }
 
     /* ── optional link ── */
@@ -639,7 +642,7 @@
       '01': {
         tag:  '',
         title:'Reconstruct of Future Past',
-        year: 'Video Installation',
+        year: 'Multiple Screening',
         desc: `In a future Anthropocene era where human activities have irrevocably impacted the global ecosystem, much of life has gone extinct, leaving only small, scattered groups of humans. Ancient lifeforms are resurrected through de-extinction, returning to a new world in forms different from what was once imagined, with the goal of restoring the collapsed biosphere.
 
 However, this intervention only compounds the problem, giving rise to a synthetic nature—a new ecological state that humanity can no longer control. The role of the creator is thus shifted to that of an observer, witnessing the very changes they have caused.
@@ -648,9 +651,12 @@ This work explores the ethics of de-extinction and questions human agency in int
         imgPlaceholderColor: '#c8c2b8',
         imgSrc: 'images/ROFP_3.png',
         showExtra: true,
-        imgEx1: 'images/ROFP_5.png',
-        imgEx2: 'images/ROFP_2.png',
-        imgEx3: 'images/ROFP_4.png',
+        extraImages: [
+          'images/ROFP_2.png',
+          'images/ROFP_4.png',
+          'images/ROFP_5.png',
+          'images/Reconstruct 1.png',  
+        ]
       },
       '02': {
         tag:  '',
@@ -665,7 +671,7 @@ This work explores the ethics of de-extinction and questions human agency in int
         tag:  '',
         title:'STACK TOKYO PERFORMANCE',
         year: 'Audio-Visual Live Performance',
-        desc: 'A live audio-visual performance combining modular synthesis with real-time generative visuals. Performed at WPÜ HOTEL, Tokyu, Japan.',
+        desc: 'A live audio-visual performance combining modular synthesis with real-time generative visuals. Performed at WPÜ HOTEL, Tokyo, Japan.',
         imgPlaceholderColor: '#e8e3dc',
         imgSrc: 'images/Japan1.png',
         showExtra: false,
@@ -678,14 +684,17 @@ This work explores the ethics of de-extinction and questions human agency in int
         imgPlaceholderColor: '#b8b2a8',
         imgSrc: 'images/impure1.png',
         showExtra: true,
-        imgEx1: 'images/ROFP_5.png',
-        imgEx2: 'images/ROFP_2.png',
+        extraImages: [
+          'images/Impure2.jpg',
+          'images/Impure3.jpg',
+          'images/Impure4.jpg',
+        ]
       },
       '05': {
         tag:  '',
         title:'Sucktoria Robonova',
         year: 'Interactive Art',
-        desc: 'Three screens display parallel timelines of the same location recorded at different hours. The piece investigates how light and duration alter spatial memory.',
+        desc: '',
         imgPlaceholderColor: '#d4cfc8',
         imgSrc: 'images/Sucktoria.png',
         showExtra: false,
