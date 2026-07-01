@@ -294,17 +294,19 @@
     }
     .panel-backdrop.open { opacity: 1; pointer-events: all; }
 
-    .side-panel {
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 100%;       /* หรือขนาดที่คุณต้องการ */
-  max-width: 500px;  /* อย่าให้มันกว้างเกินไป */
-  height: 100vh;     /* ให้สูงเต็มจอ */
-  display: flex;
-  flex-direction: column; /* เรียงจากบนลงล่าง */
-  background: white;
-  z-index: 1000;     /* ให้มันอยู่บนสุด */
+     .side-panel {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;           /* ใส่ bottom: 0 เพื่อให้สูงเต็มจอ */
+      width: 100%;
+      max-width: 500px;
+      background: white;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.48s cubic-bezier(0.16,1,0.3,1);
+      transform: translateX(100%); 
 }
     .side-panel.open { transform: translateX(0); }
 
@@ -334,6 +336,7 @@
       flex: 0 0 auto;    /* ล็อกความสูงให้พอดีกับรูป ไม่ให้มันยืด/หด */
       max-height: 300px; /* จำกัดความสูงรูปไม่ให้ใหญ่เกินไป */
       overflow: hidden;
+      position: relative; 
   }
 
     .panel-img-wrap img {
