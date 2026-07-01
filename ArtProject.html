@@ -333,12 +333,13 @@
     .panel-close:hover { border-color: var(--ink); color: var(--ink); }
 
     /* ── main image ── */
-     .panel-img-wrap {
-      flex: 0 0 auto;
+    .panel-img-wrap {
+      width: 100%;       
+      height: auto;      
       max-height: 500px; 
-      background: #f0f0f0; 
-      overflow: hidden;       
-  }
+      overflow: hidden;
+      flex-shrink: 0;    
+}
     .panel-img-wrap img {
       width: 100%;
       height: 100%;
