@@ -295,18 +295,17 @@
     .panel-backdrop.open { opacity: 1; pointer-events: all; }
 
     .side-panel {
-      position: fixed; top: 0; right: 0; bottom: 0;
-      width: min(1100px, 92vw);
-      background: var(--bg);
-      z-index: 201;
-      transform: translateX(100%);
-      /* will-change promotes to compositor layer — no main-thread jank */
-      will-change: transform;
-      transition: transform 0.48s cubic-bezier(0.16,1,0.3,1);
-      display: flex; flex-direction: column;
-      overflow: hidden;
-      box-shadow: -4px 0 32px rgba(26,24,20,0.10);
-    }
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100%;       /* หรือขนาดที่คุณต้องการ */
+  max-width: 500px;  /* อย่าให้มันกว้างเกินไป */
+  height: 100vh;     /* ให้สูงเต็มจอ */
+  display: flex;
+  flex-direction: column; /* เรียงจากบนลงล่าง */
+  background: white;
+  z-index: 1000;     /* ให้มันอยู่บนสุด */
+}
     .side-panel.open { transform: translateX(0); }
 
     /* left accent bar */
@@ -331,17 +330,17 @@
     .panel-close:hover { border-color: var(--ink); color: var(--ink); }
 
     /* ── main image ── */
-   .panel-img-wrap {
-  flex: 0 0 auto;    /* ล็อกความสูงให้พอดีกับรูป ไม่ให้มันยืด/หด */
-  max-height: 300px; /* จำกัดความสูงรูปไม่ให้ใหญ่เกินไป */
-  overflow: hidden;
-}
+     .panel-img-wrap {
+      flex: 0 0 auto;    /* ล็อกความสูงให้พอดีกับรูป ไม่ให้มันยืด/หด */
+      max-height: 300px; /* จำกัดความสูงรูปไม่ให้ใหญ่เกินไป */
+      overflow: hidden;
+  }
 
-.panel-img-wrap img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* ตัดส่วนเกินออกเพื่อให้อยู่ในกรอบ */
-}
+    .panel-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* ตัดส่วนเกินออกเพื่อให้อยู่ในกรอบ */
+  }
     .panel-img-placeholder {
       width: 100%; height: 100%;
       display: flex; align-items: center; justify-content: center;
@@ -361,11 +360,10 @@
 
     /* ── scrollable body ── */
     .panel-body {
-      flex: 1; overflow-y: auto;
-      padding: 32px 36px 40px;
-      scrollbar-width: thin;
-      scrollbar-color: var(--line) transparent;
-    }
+      flex: 1;           /* ให้ส่วนนี้ยืดไปเท่าที่เหลือ */
+      overflow-y: auto;  /* นี่คือหัวใจสำคัญ: ให้มันเลื่อนได้ถ้าเนื้อหายาว */
+      padding: 20px;
+}
 
     .panel-tag {
       font-family: var(--mono); font-size: 10px;
