@@ -1,0 +1,740 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Design Project — Thitipan Vimonpan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Datatype:wght@100..900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #ffffff;
+      --ink: #1a1814;
+      --muted: #8a8680;
+      --accent: #3963FE;
+      --line: rgba(26,24,20,0.12);
+      --serif: 'IBM Plex Sans', 'IBM Plex Sans Thai', sans-serif;
+      --mono: 'Datatype', monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--serif);
+      font-weight: 300;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* Custom cursor */
+    .cursor {
+      width: 15px; height: 15px;
+      background: var(--bg);
+      border-radius: 50%;
+      position: fixed;
+      top: 0; left: 0;
+      pointer-events: none;
+      z-index: 9999;
+      mix-blend-mode: difference;
+      transition: ;
+    }
+    .cursor-ring {
+      width: 35px; height: 35px;
+      border: 2px solid var(--ink);
+      border-radius: 50%;
+      position: fixed;
+      top: 0; left: 0;
+      pointer-events: none;
+      z-index: 9998;
+      mix-blend-mode: difference;
+      transition: transform 0.2s ease, width 0.2s, height 0.3s, opacity 0.3s;
+      transform: translate(-12px, -12px);
+    }
+    
+    /* ── NAV ── */
+nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 28px 48px;
+      mix-blend-mode: multiply;
+    }
+
+    .nav-logo {
+      font-family: var(--mono);
+      font-size: 17px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--ink);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: var(--mono);
+      font-size: 17px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--ink); }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      padding: 160px 48px 80px;
+      border-bottom: 1px solid var(--line);
+      display: flex; justify-content: space-between; align-items: flex-end; gap: 40px;
+    }
+    .page-eyebrow {
+      font-family: var(--mono); font-size: 10px;
+      letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 16px;
+      opacity: 0; animation: fadeUp 0.7s 0.2s forwards;
+    }
+    .page-title {
+      font-family: var(--mono);
+      font-size: clamp(48px, 7vw, 88px);
+      font-weight: 300; line-height: 1.0; letter-spacing: -0.02em;
+      opacity: 0; animation: fadeUp 0.8s 0.35s forwards;
+    }
+    .page-title em { font-style: italic; color: var(--muted); }
+    .page-count {
+      font-family: var(--mono); font-size: 11px;
+      letter-spacing: 0.2em; color: var(--muted);
+      opacity: 0; animation: fadeIn 0.8s 0.7s forwards;
+      align-self: flex-end; padding-bottom: 8px;
+    }
+
+   
+    /* ── MASONRY ── */
+    .masonry-section { padding: 48px 48px 120px; }
+
+    .masonry { columns: 3; column-gap: 16px; }
+    @media (max-width: 1000px) { .masonry { columns: 2; } }
+    @media (max-width: 600px) { .masonry { columns: 1; } }
+
+    .masonry-item {
+      break-inside: avoid; margin-bottom: 16px;
+      position: relative; overflow: hidden;
+      background: #f0ede8; cursor: none;
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .masonry-item.visible { opacity: 1; transform: translateY(0); }
+
+    .masonry-item img { width: 100%; display: block; transition: transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94); }
+    .masonry-item:hover img { transform: scale(1.04); }
+
+    .masonry-placeholder {
+      width: 100%; display: block;
+      background: var(--placeholder-color, #e0ddd8);
+      transition: transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    .masonry-item:hover .masonry-placeholder { transform: scale(1.04); }
+
+    .masonry-overlay {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 20px 20px 16px;
+      background: linear-gradient(transparent, rgba(26,24,20,0.72));
+      color: #f5f3ef;
+      opacity: 0; transition: opacity 0.3s; transform: translateY(4px);
+    }
+    .masonry-item:hover .masonry-overlay { opacity: 1; transform: translateY(0); }
+
+    .item-tag {
+      font-family: var(--mono); font-size: 8px;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      opacity: 0.6; margin-bottom: 4px;
+    }
+    .item-title { font-size: 16px; font-weight: 300; letter-spacing: -0.01em; }
+    .item-year { font-family: var(--mono); font-size: 9px; opacity: 0.4; margin-top: 3px; }
+
+    .item-index {
+      position: absolute; top: 12px; left: 14px;
+      font-family: var(--mono); font-size: 9px;
+      letter-spacing: 0.2em; color: rgba(245,243,239,0.5);
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .masonry-item:hover .item-index { opacity: 1; }
+
+    .item-corner {
+      position: absolute; bottom: -1px; right: -1px;
+      width: 0; height: 0;
+      border-left: 28px solid transparent;
+      border-bottom: 28px solid var(--accent);
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .masonry-item:hover .item-corner { opacity: 1; }
+
+    /* ── CONTACT / FOOTER (same as index) ── */
+    .contact { background: var(--accent); color: var(--bg); padding: 120px 48px; }
+    .contact .section-header { display: flex; align-items: baseline; gap: 24px; margin-bottom: 80px; }
+    .contact .section-num { font-family: var(--mono); font-size: 11px; color: var(--bg); letter-spacing: 0.2em; }
+    .contact .section-title { font-size: clamp(36px,5vw,60px); font-weight: 300; letter-spacing: -0.02em; }
+    .contact .section-line { flex:1; height:1px; background: rgba(245,243,239,0.15); margin-bottom: 4px; }
+
+    .contact-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .contact-headline { font-size: clamp(28px,3.5vw,46px); font-weight: 300; line-height: 1.2; letter-spacing: -0.02em; }
+    .contact-links { display: flex; flex-direction: column; }
+    .contact-link-item {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 22px 0; border-bottom: 1px solid rgba(245,243,239,0.1);
+      text-decoration: none; color: var(--bg);
+      transition: padding-left 0.3s;
+    }
+    .contact-link-item:hover { padding-left: 12px; }
+    .contact-link-label { font-family: var(--mono); font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.4; margin-bottom: 4px; }
+    .contact-link-value { font-size: 20px; }
+    .contact-arrow { font-size: 18px; }
+
+    footer {
+      background: var(--ink); color: rgba(245,243,239,0.3);
+      padding: 28px 48px; display: flex;
+      justify-content: space-between; align-items: center;
+      border-top: 1px solid rgba(245,243,239,0.06);
+    }
+    footer span { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; }
+
+    @keyframes fadeUp {
+      from { opacity:0; transform: translateY(20px); }
+      to   { opacity:1; transform: translateY(0); }
+    }
+    @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+    .reveal {
+      opacity: 0; transform: translateY(28px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .reveal.visible { opacity:1; transform: none; }
+
+    @media (max-width: 768px) {
+      nav { padding: 20px 24px; }
+      .page-header { padding: 120px 24px 60px; flex-direction: column; align-items: flex-start; }
+      .filter-bar { padding: 20px 24px; }
+      .masonry-section { padding: 32px 24px 80px; }
+      .contact { padding: 80px 24px; }
+      .contact-layout { grid-template-columns: 1fr; gap: 48px; }
+      footer { flex-direction: column; gap: 8px; text-align: center; }
+    }
+
+    /* ══ SIDE PANEL ══ */
+    .panel-backdrop {
+      position: fixed; inset: 0;
+      background: rgba(26,24,20,0.45);
+      z-index: 200;
+      opacity: 0; pointer-events: none;
+      will-change: opacity;
+      transition: opacity 0.35s ease;
+    }
+    .panel-backdrop.open { opacity: 1; pointer-events: all; }
+
+    .side-panel {
+      position: fixed; top: 0; right: 0; bottom: 0;
+      width: min(1300px, 95vw);
+      background: var(--bg);
+      z-index: 201;
+      transform: translateX(100%);
+      will-change: transform;
+      transition: transform 0.48s cubic-bezier(0.16,1,0.3,1);
+      display: flex; flex-direction: column;
+      overflow: hidden;
+      box-shadow: -4px 0 32px rgba(26,24,20,0.10);
+    }
+    .side-panel::before {
+      content: ''; position: absolute;
+      top: 0; left: 0; bottom: 0;
+      width: 2px; background: var(--accent); z-index: 1;
+    }
+    .side-panel.open { transform: translateX(0); }
+
+    .panel-close {
+      position: absolute; top: 20px; right: 20px;
+      width: 36px; height: 36px;
+      border: 1px solid var(--line);
+      background: var(--bg); cursor: none;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--muted); font-size: 16px;
+      font-family: var(--mono);
+      transition: border-color 0.2s, color 0.2s;
+      z-index: 2;
+    }
+    .panel-close:hover { border-color: var(--ink); color: var(--ink); }
+
+    .panel-img-wrap {
+      width: 100%; overflow: hidden;
+      flex-shrink: 0; position: relative;
+    }
+    .panel-img-wrap img {
+      display: block; width: 100%; height: auto; object-fit: contain;
+    }
+    .panel-img-placeholder {
+      width: 100%; height: 320px;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--ph, #d4cfc8);
+    }
+    .panel-img-placeholder span {
+      font-family: var(--mono); font-size: 10px;
+      letter-spacing: 0.28em; text-transform: uppercase;
+      color: rgba(26,24,20,0.22);
+    }
+
+    .panel-body {
+      flex: 1; overflow-y: auto; padding: 36px 48px 56px;
+      min-height: 0;
+      scrollbar-width: thin; scrollbar-color: var(--line) transparent;
+    }
+    .panel-tag {
+      font-family: var(--mono); font-size: 10px;
+      letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 10px;
+    }
+    .panel-title {
+      font-family: var(--mono);
+      font-size: clamp(26px, 2.5vw, 34px);
+      font-weight: 400; line-height: 1.2;
+      letter-spacing: -0.01em; margin-bottom: 6px;
+    }
+    .panel-year {
+      font-family: var(--serif); font-size: 15px;
+      letter-spacing: 0.1em; color: var(--muted); margin-bottom: 22px;
+    }
+    .panel-divider { height: 1px; background: var(--line); margin-bottom: 22px; }
+    .panel-desc {
+      font-family: var(--serif); font-size: 16px;
+      line-height: 1.85; color: var(--ink); margin-bottom: 36px;
+    }
+
+    /* extra images — 1 column เรียงลงมา ไม่จำกัดจำนวน */
+    .panel-extra-imgs {
+      display: flex; flex-direction: column;
+      gap: 20px; margin-bottom: 8px;
+    }
+    .panel-extra-img { width: 100%; overflow: hidden; }
+    .panel-extra-img img { width: 100%; height: auto; display: block; }
+
+    /* items with panel — show pointer hint */
+    .masonry-item.has-panel { cursor: none; }
+    .masonry-item.has-panel .item-corner { opacity: 0; transition: opacity 0.3s; }
+    .masonry-item.has-panel:hover .item-corner { opacity: 1; }
+
+    body.panel-open { overflow-y: hidden; padding-right: var(--sb-width, 0px); }
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="/ThitipanV_Website/" class="nav-logo">Thitipan Vimonpan</a>
+    <ul class="nav-links">
+      <li><a href="/ThitipanV_Website/#about">About</a></li>
+      <li><a href="ArtProject">Art Project</a></li>
+      <li><a href="DesignProject" style="color: var(--ink);">Design Project</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- PAGE HEADER -->
+  <header class="page-header">
+    <div class="page-header-left">
+      <p class="page-eyebrow">Selected Works</p>
+      <h1 class="page-title">Design Project
+    </div>
+    <p class="page-count">07 works</p>
+  </header>
+
+
+  <!-- MASONRY GRID -->
+  <div class="masonry-section">
+    <div class="masonry" id="masonryGrid">
+
+      <!--
+      ════════════════════════════════════════════════════
+      วิธีเพิ่มงานใหม่:
+      1. Copy block นี้ไปวางไว้ "บนสุด" ของ #masonryGrid
+      2. เปลี่ยน data-key ให้ตรงกับ key ใน projects{} ใน JS
+      3. เพิ่ม entry ใน projects{} พร้อม imgSrc / imgExtra[]
+      4. ถ้าไม่ต้องการ panel ให้ลบ has-panel ออก
+
+      <div class="masonry-item has-panel" data-key="ชื่องาน">
+        <div class="masonry-placeholder" style="height:400px; --placeholder-color:#d0ccc4;"></div>
+        <div class="masonry-overlay">
+          <h3 class="item-title">ชื่องาน</h3>
+          <p class="item-year">ประเภทงาน</p>
+        </div>
+      </div>
+      ════════════════════════════════════════════════════
+      -->
+
+      <div class="masonry-item has-panel" data-key="mads2026">
+        <div class="masonry-placeholder" style="height:440px; --placeholder-color:#c4bdb4;"></div>
+        <div class="masonry-overlay">
+          <h3 class="item-title">Mads Degree Show 2026</h3>
+          <p class="item-year">CI and Online Post</p>
+        </div>
+      </div>
+
+      <div class="masonry-item has-panel" data-key="madsfest2024">
+        <div class="masonry-placeholder" style="height:300px; --placeholder-color:#d8d2c6;"></div>
+        <div class="masonry-overlay">
+          <h3 class="item-title">MADsFestival 2024</h3>
+          <p class="item-year">Logo and Element Design</p>
+        </div>
+      </div>
+
+      <div class="masonry-item has-panel" data-key="mapherbal">
+        <div class="masonry-placeholder" style="height:500px; --placeholder-color:#bdb6ac;"></div>
+        <div class="masonry-overlay">
+          <h3 class="item-title">Map Herbal Cafe</h3>
+          <p class="item-year">Branding Design</p>
+        </div>
+      </div>
+
+      <div class="masonry-item has-panel" data-key="peruvian">
+        <div class="masonry-placeholder" style="height:320px; --placeholder-color:#d0ccc4;"></div>
+        <div class="masonry-overlay">
+          <h3 class="item-title">Peruvian</h3>
+          <p class="item-year">Zine Design</p>
+        </div>
+      </div>
+
+      <div class="masonry-item has-panel" data-key="supereco">
+        <div class="masonry-placeholder" style="height:380px; --placeholder-color:#c8c2b8;"></div>
+        <div class="masonry-overlay">
+          <h3 class="item-title">Thailand Super Eco</h3>
+          <p class="item-year">Livery Design Honda Brio</p>
+        </div>
+      </div>
+
+      <div class="masonry-item has-panel" data-key="prehistoric">
+        <div class="masonry-placeholder" style="height:260px; --placeholder-color:#e0dbd4;"></div>
+        <div class="masonry-overlay">
+          <h3 class="item-title">Prehistoric Set</h3>
+          <p class="item-year">Illustration Sticker Design</p>
+        </div>
+      </div>
+
+      <div class="masonry-item has-panel" data-key="postcard">
+        <div class="masonry-placeholder" style="height:340px; --placeholder-color:#d4cfc8;"></div>
+        <div class="masonry-overlay">
+          <h3 class="item-title">Postcard</h3>
+          <p class="item-year">Postcard Design</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PANEL BACKDROP -->
+  <div class="panel-backdrop" id="panelBackdrop"></div>
+
+  <!-- SIDE PANEL -->
+  <aside class="side-panel" id="sidePanel" role="dialog" aria-modal="true">
+    <button class="panel-close" id="panelClose" aria-label="Close">✕</button>
+
+    <div class="panel-img-wrap" id="panelImgWrap">
+      <div class="panel-img-placeholder" id="panelImgPh"><span>No image yet</span></div>
+      <img id="panelImg" src="" alt="" style="display:none; position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
+    </div>
+
+    <div class="panel-body">
+      <p class="panel-tag"  id="panelTag">—</p>
+      <h2 class="panel-title" id="panelTitle">—</h2>
+      <p class="panel-year"  id="panelYear">—</p>
+      <div class="panel-divider"></div>
+      <p class="panel-desc"  id="panelDesc">—</p>
+      <div class="panel-extra-imgs" id="panelExtra"></div>
+    </div>
+  </aside>
+
+  <!-- CONTACT -->
+   <section class="contact" id="contact">
+    <div class="section-header reveal">
+      <span class="section-num"></span>
+      <h2 class="section-title">Contact</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="contact-layout">
+      <div class="contact-headline reveal">
+        
+      </div>
+      <div class="contact-links reveal">
+        <a href="mailto:teard.v@gmail.com" class="contact-link-item">
+          <div>
+            <p class="contact-link-label">Email</p>
+            <p class="contact-link-value">Teard.v@gmail.com</p>
+          </div>
+          <span class="contact-arrow">→</span>
+        </a>
+        <a href="tel:+66827675916" class="contact-link-item">
+          <div>
+            <p class="contact-link-label">Telephone</p>
+            <p class="contact-link-value">+66 82 767 5916</p>
+          </div>
+          <span class="contact-arrow">→</span>
+        </a>
+        <a href="https://www.instagram.com/ttthitipan_v/" target="_blank" class="contact-link-item">
+          <div>
+            <p class="contact-link-label">Instagram</p>
+            <p class="contact-link-value">@TTThitipan_V</p>
+          </div>
+          <span class="contact-arrow">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span>© 2026 Thitipan Vimonpan. All rights reserved</span>
+    <span>Such is Life</span>
+  </footer>
+
+  <script>
+    /* ── CURSOR ── */
+    const cursor = document.getElementById('cursor');
+    const ring   = document.getElementById('cursorRing');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      cursor.style.transform = `translate(${mx - 5}px, ${my - 5}px)`;
+    });
+    function animateRing() {
+      rx += (mx - rx - 16) * 0.12;
+      ry += (my - ry - 16) * 0.12;
+      ring.style.transform = `translate(${rx}px, ${ry}px)`;
+      requestAnimationFrame(animateRing);
+    }
+    animateRing();
+    document.querySelectorAll('a, button').forEach(el => {
+      el.addEventListener('mouseenter', () => { ring.style.width='48px'; ring.style.height='48px'; ring.style.opacity='0.5'; });
+      el.addEventListener('mouseleave', () => { ring.style.width='32px'; ring.style.height='32px'; ring.style.opacity='1'; });
+    });
+
+    /* ════════════════════════════════════════════════════
+       PROJECT DATA
+       ────────────────────────────────────────────────────
+       วิธีเพิ่มงานใหม่:
+
+       STEP 1 — เพิ่ม card ใน HTML (วางบนสุดของ #masonryGrid เสมอ)
+       ──────────────────────────────────────────────────
+       <div class="masonry-item has-panel" data-key="ชื่อkey">
+         <div class="masonry-placeholder" style="height:400px; --placeholder-color:#d0ccc4;"></div>
+         <div class="masonry-overlay">
+           <h3 class="item-title">ชื่องาน</h3>
+           <p class="item-year">ประเภทงาน</p>
+         </div>
+       </div>
+       ถ้าไม่ต้องการ panel → ลบ has-panel และ data-key ออก
+
+       STEP 2 — เพิ่ม entry ใน projects{} ด้านล่างนี้
+       ──────────────────────────────────────────────────
+       'ชื่อkey': {
+         tag:      'ประเภท · ปี',
+         title:    'ชื่องาน',
+         year:     'ประเภทย่อย',
+         desc:     'คำอธิบายงาน',
+         imgSrc:   'images/xxx.jpg',     ← รูปหลัก (ลบบรรทัดนี้ถ้าไม่มีรูป)
+         imgExtra: [                     ← รูปเพิ่มเติม เรียงลงมา ไม่จำกัด
+           'images/a.jpg',
+           'images/b.jpg',
+         ],
+       },
+    ════════════════════════════════════════════════════ */
+    const projects = {
+
+      'mads2026': {
+        tag:      'CI Design · 2026',
+        title:    'Mads Degree Show 2026',
+        year:     'CI and Online Post',
+        desc:     'Visual identity and online post series for the MADS Degree Show 2026.',
+        // imgSrc:   'images/mads2026-main.jpg',
+        imgExtra: [],
+      },
+
+      'madsfest2024': {
+        tag:      'Identity · 2024',
+        title:    'MADsFestival 2024',
+        year:     'Logo and Element Design',
+        desc:     'Logo and graphic element system for MADsFestival 2024.',
+        // imgSrc:   'images/madsfest-main.jpg',
+        imgExtra: [],
+      },
+
+      'mapherbal': {
+        tag:      'Branding · 2024',
+        title:    'Map Herbal Cafe',
+        year:     'Branding Design',
+        desc:     'Complete branding system for Map Herbal Cafe including logo, packaging, and collateral.',
+        // imgSrc:   'images/mapherbal-main.jpg',
+        imgExtra: [],
+      },
+
+      'peruvian': {
+        tag:      'Publication · 2024',
+        title:    'Peruvian',
+        year:     'Zine Design',
+        desc:     'An independently produced zine exploring Peruvian culture and visual heritage.',
+        // imgSrc:   'images/peruvian-main.jpg',
+        imgExtra: [],
+      },
+
+      'supereco': {
+        tag:      'Livery · 2023',
+        title:    'Thailand Super Eco',
+        year:     'Livery Design Honda Brio',
+        desc:     'Custom livery design for the Thailand Super Eco competition, applied to a Honda Brio.',
+        // imgSrc:   'images/supereco-main.jpg',
+        imgExtra: [],
+      },
+
+      'prehistoric': {
+        tag:      'Illustration · 2023',
+        title:    'Prehistoric Set',
+        year:     'Illustration Sticker Design',
+        desc:     'A series of illustrated stickers depicting prehistoric creatures in a contemporary graphic style.',
+        // imgSrc:   'images/prehistoric-main.jpg',
+        imgExtra: [],
+      },
+
+      'postcard': {
+        tag:      'Print · 2024',
+        title:    'Postcard',
+        year:     'Postcard Design',
+        desc:     'A set of illustrated postcards designed as printed collectibles, each exploring a distinct visual language.',
+        // imgSrc:   'images/postcard-main.jpg',
+        imgExtra: [
+          // 'images/postcard-b.jpg',
+          // 'images/postcard-c.jpg',
+          // เพิ่มได้เรื่อยๆ ไม่จำกัด
+        ],
+      },
+
+    };
+
+    /* ── PANEL LOGIC ── */
+    const backdrop  = document.getElementById('panelBackdrop');
+    const panel     = document.getElementById('sidePanel');
+    const closeBtn  = document.getElementById('panelClose');
+    const panelTag  = document.getElementById('panelTag');
+    const panelTitle= document.getElementById('panelTitle');
+    const panelYear = document.getElementById('panelYear');
+    const panelDesc = document.getElementById('panelDesc');
+    const panelExtra= document.getElementById('panelExtra');
+    const panelImg  = document.getElementById('panelImg');
+    const panelImgPh= document.getElementById('panelImgPh');
+
+    function openPanel(key) {
+      const d = projects[key];
+      if (!d) return;
+
+      panelTag.textContent   = d.tag   || '';
+      panelTitle.textContent = d.title || '';
+      panelYear.textContent  = d.year  || '';
+      panelDesc.innerHTML    = d.desc  || '';
+
+      /* รูปหลัก — ซ่อน wrap ทั้งก้อนถ้าไม่มีรูปเลย */
+      const imgWrap = document.getElementById('panelImgWrap');
+      const hasImg  = d.imgSrc;
+      const hasExtra = (d.imgExtra || []).length > 0;
+
+      if (hasImg) {
+        imgWrap.style.display = 'block';
+        panelImg.src = d.imgSrc;
+        panelImg.style.display = 'block';
+        panelImgPh.style.display = 'none';
+      } else if (!hasExtra) {
+        /* ไม่มีทั้งรูปหลักและรูปเพิ่ม — ซ่อน wrap ทั้งหมด */
+        imgWrap.style.display = 'none';
+        panelImg.style.display = 'none';
+        panelImgPh.style.display = 'none';
+      } else {
+        /* มีแค่รูปเพิ่ม ซ่อนเฉพาะรูปหลัก */
+        imgWrap.style.display = 'none';
+        panelImg.style.display = 'none';
+        panelImgPh.style.display = 'none';
+      }
+
+      /* รูปเพิ่มเติม — เรียงลงมา ไม่จำกัดจำนวน */
+      panelExtra.innerHTML = '';
+      const extras = d.imgExtra || [];
+      if (extras.length > 0) {
+        panelExtra.style.display = 'flex';
+        extras.forEach(src => {
+          const wrap = document.createElement('div');
+          wrap.className = 'panel-extra-img';
+          const img = document.createElement('img');
+          img.src = src; img.alt = '';
+          wrap.appendChild(img);
+          panelExtra.appendChild(wrap);
+        });
+      } else {
+        panelExtra.style.display = 'none';
+      }
+
+      /* lock scroll ไม่ให้กระตุก */
+      const sbW = window.innerWidth - document.documentElement.clientWidth;
+      document.documentElement.style.setProperty('--sb-width', sbW + 'px');
+      document.body.classList.add('panel-open');
+      backdrop.classList.add('open');
+      panel.classList.add('open');
+      panel.querySelector('.panel-body').scrollTop = 0;
+    }
+
+    function closePanel() {
+      backdrop.classList.remove('open');
+      panel.classList.remove('open');
+      document.body.classList.remove('panel-open');
+      document.documentElement.style.setProperty('--sb-width', '0px');
+    }
+
+    closeBtn.addEventListener('click', closePanel);
+    backdrop.addEventListener('click', closePanel);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closePanel(); });
+
+    /* คลิกได้เฉพาะการ์ดที่มี has-panel */
+    document.querySelectorAll('.masonry-item.has-panel').forEach(item => {
+      item.addEventListener('click', () => {
+        const key = item.dataset.key;
+        if (key) openPanel(key);
+      });
+    });
+
+    /* ── SCROLL REVEAL ── */
+    const revealEls    = document.querySelectorAll('.reveal');
+    const masonryItems = document.querySelectorAll('.masonry-item');
+
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.1 });
+    revealEls.forEach(el => io.observe(el));
+
+    const io2 = new IntersectionObserver(entries => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('visible'), i * 80);
+          io2.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.05 });
+    masonryItems.forEach(el => io2.observe(el));
+  </script>
+</body>
+</html>
