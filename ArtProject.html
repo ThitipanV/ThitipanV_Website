@@ -622,7 +622,7 @@
                imgPlaceholderColor: '#dbd5cc',
                youtubeLink: 'https://www.youtube.com/watch?v=J3pbbdLWooI',
                extraImages: [
-                 { type: 'image', src: 'images/btr1.webp'}
+                 { type: 'image', src: 'images/btr1.webp'},
                  { type: 'image', src: 'images/btr2.webp'}
                  
                ],
@@ -687,12 +687,12 @@
           panelLink.style.display = 'inline-flex';
           panelLink.href = d.youtubeLink;
           panelLink.target = '_blank'; 
-          panelLink.querySelector('span').textContent = 'Watch on YouTube →';
+          panelLink.innerHTML = 'WATCH ON YOUTUBE <span>→</span>'; 
         } else if (d.link) {
           panelLink.style.display = 'inline-flex';
           panelLink.href = d.link;
           panelLink.target = '_self';
-          panelLink.querySelector('span').textContent = 'View Full Project →';
+          panelLink.innerHTML = 'VIEW FULL PROJECT <span>→</span>'; 
         } else {
           panelLink.style.display = 'none';
         }
