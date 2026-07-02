@@ -588,28 +588,7 @@ nav {
          ],
        },
     ════════════════════════════════════════════════════ */
-   <script>
-    /* ── CURSOR ── */
-    const cursor = document.getElementById('cursor');
-    const ring   = document.getElementById('cursorRing');
-    let mx = 0, my = 0, rx = 0, ry = 0;
-
-    document.addEventListener('mousemove', e => {
-      mx = e.clientX; my = e.clientY;
-      cursor.style.transform = `translate(${mx - 5}px, ${my - 5}px)`;
-    });
-    function animateRing() {
-      rx += (mx - rx - 16) * 0.12;
-      ry += (my - ry - 16) * 0.12;
-      ring.style.transform = `translate(${rx}px, ${ry}px)`;
-      requestAnimationFrame(animateRing);
-    }
-    animateRing();
-    document.querySelectorAll('a, button, .masonry-item.has-panel').forEach(el => {
-      el.addEventListener('mouseenter', () => { ring.style.width='48px'; ring.style.height='48px'; ring.style.opacity='0.5'; });
-      el.addEventListener('mouseleave', () => { ring.style.width='32px'; ring.style.height='32px'; ring.style.opacity='1'; });
-    });
-
+   
     /* ── PROJECT DATA ── */
     const projects = {
       'mads2026': {
