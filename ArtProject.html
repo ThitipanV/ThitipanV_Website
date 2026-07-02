@@ -635,14 +635,21 @@
       };
 
       /* ── 2. BUILD MASONRY ── */
-      const grid = document.getElementById('masonryGrid');
+     const grid = document.getElementById('masonryGrid');
       Object.keys(projects).forEach(id => {
         const work = projects[id];
         const item = document.createElement('div');
         item.className = 'masonry-item reveal';
+        
         const imageHTML = work.imgSrc ? `<img src="${work.imgSrc}" alt="${work.title}" style="width:100%; height:auto; display:block;">` : `<div class="masonry-placeholder" style="height:380px; --placeholder-color:${work.imgPlaceholderColor};"></div>`;
+        
         item.innerHTML = `<div class="item-index">${id}</div>${imageHTML}<div class="masonry-overlay"><p class="item-tag">${work.tag}</p><h3 class="item-title">${work.title}</h3><p class="item-year">${work.year}</p></div><div class="item-corner"></div>`;
-        item.addEventListener('click', () => openPanel(id));
+        
+        // --- ส่วนที่แก้: เช็คว่าถ้า showExtra เป็น false จะไม่ให้คลิกเปิด ---
+        if (work.showExtra !== false) {
+          item.addEventListener('click', () => openPanel(id));
+        }
+
         grid.appendChild(item);
       });
 
