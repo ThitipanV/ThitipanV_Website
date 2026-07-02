@@ -588,12 +588,34 @@ nav {
          ],
        },
     ════════════════════════════════════════════════════ */
-    const projects = {
+    <script>
+    /* ── CURSOR ── */
+    const cursor = document.getElementById('cursor');
+    const ring   = document.getElementById('cursorRing');
+    let mx = 0, my = 0, rx = 0, ry = 0;
 
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      cursor.style.transform = `translate(${mx - 5}px, ${my - 5}px)`;
+    });
+    function animateRing() {
+      rx += (mx - rx - 16) * 0.12;
+      ry += (my - ry - 16) * 0.12;
+      ring.style.transform = `translate(${rx}px, ${ry}px)`;
+      requestAnimationFrame(animateRing);
+    }
+    animateRing();
+    document.querySelectorAll('a, button, .masonry-item.has-panel').forEach(el => {
+      el.addEventListener('mouseenter', () => { ring.style.width='48px'; ring.style.height='48px'; ring.style.opacity='0.5'; });
+      el.addEventListener('mouseleave', () => { ring.style.width='32px'; ring.style.height='32px'; ring.style.opacity='1'; });
+    });
+
+    /* ── PROJECT DATA ── */
+    const projects = {
       'mads2026': {
-        tag:      '',
+        tag:      '2026',
         title:    'Mads Degree Show 2026',
-        year:     'Ci and Online Post',
+        year:     'CI and Online Post',
         desc:     '',
         imgExtra: [
           'design/Degree1.webp',
@@ -602,10 +624,9 @@ nav {
           'design/Degree4.webp'
         ],
       },
-
       'madsfest2024': {
-        tag:      '',
-        title:    'MADsFestival 2024',
+        tag:      '2024',
+        title:    'MADs Festival 2024',
         year:     'Poster, Exhibition Guide, Logo, elements and Signage Design',
         desc:     '',
         imgExtra: [
@@ -614,7 +635,6 @@ nav {
           'design/viyog3.webp'
         ],
       },
-
       'mapherbal': {
         tag:      '',
         title:    'Map Herbal Cafe',
@@ -632,7 +652,6 @@ nav {
           'design/map9.webp'
         ],
       },
-
       'peruvian': {
         tag:      '',
         title:    'Peruvian',
@@ -646,7 +665,6 @@ nav {
           'design/zine5.webp'
         ],
       },
-
       'supereco': {
         tag:      '',
         title:    'Thailand Super Eco',
@@ -658,7 +676,6 @@ nav {
           'design/livery3.webp'
         ],
       },
-
       'prehistoric': {
         tag:      '',
         title:    'Prehistoric Set',
@@ -672,7 +689,6 @@ nav {
           'design/sticker5.webp'
         ],
       },
-
     };
 
     /* ── PANEL LOGIC ── */
@@ -691,36 +707,27 @@ nav {
       const d = projects[key];
       if (!d) return;
 
-      panelTag.textContent   = d.tag   || '';
-      panelTitle.textContent = d.title || '';
-      panelYear.textContent  = d.year  || '';
-      panelDesc.innerHTML    = d.desc  || '';
+      panelTag.textContent   = d.tag   || '—';
+      panelTitle.textContent = d.title || '—';
+      panelYear.textContent  = d.year  || '—';
+      panelDesc.innerHTML    = d.desc  || '—';
 
-      /* รูปหลัก — ซ่อน wrap ทั้งก้อนถ้าไม่มีรูปเลย */
       const imgWrap = document.getElementById('panelImgWrap');
       const hasImg  = d.imgSrc;
-      const hasExtra = (d.imgExtra || []).length > 0;
+      
+      // เคลียร์ค่า extra ก่อน
+      panelExtra.innerHTML = '';
+      const extras = d.imgExtra || [];
 
       if (hasImg) {
         imgWrap.style.display = 'block';
         panelImg.src = d.imgSrc;
         panelImg.style.display = 'block';
         panelImgPh.style.display = 'none';
-      } else if (!hasExtra) {
-        /* ไม่มีทั้งรูปหลักและรูปเพิ่ม — ซ่อน wrap ทั้งหมด */
-        imgWrap.style.display = 'none';
-        panelImg.style.display = 'none';
-        panelImgPh.style.display = 'none';
       } else {
-        /* มีแค่รูปเพิ่ม ซ่อนเฉพาะรูปหลัก */
-        imgWrap.style.display = 'none';
-        panelImg.style.display = 'none';
-        panelImgPh.style.display = 'none';
+        imgWrap.style.display = 'none'; // ซ่อนส่วน placeholder ไปเลยเพื่อความสวยงาม
       }
 
-      /* รูปเพิ่มเติม — เรียงลงมา ไม่จำกัดจำนวน */
-      panelExtra.innerHTML = '';
-      const extras = d.imgExtra || [];
       if (extras.length > 0) {
         panelExtra.style.display = 'flex';
         extras.forEach(src => {
@@ -735,7 +742,6 @@ nav {
         panelExtra.style.display = 'none';
       }
 
-      /* lock scroll ไม่ให้กระตุก */
       const sbW = window.innerWidth - document.documentElement.clientWidth;
       document.documentElement.style.setProperty('--sb-width', sbW + 'px');
       document.body.classList.add('panel-open');
@@ -755,7 +761,6 @@ nav {
     backdrop.addEventListener('click', closePanel);
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closePanel(); });
 
-    /* คลิกได้เฉพาะการ์ดที่มี has-panel */
     document.querySelectorAll('.masonry-item.has-panel').forEach(item => {
       item.addEventListener('click', () => {
         const key = item.dataset.key;
