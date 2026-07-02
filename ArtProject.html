@@ -568,66 +568,70 @@
     document.addEventListener("DOMContentLoaded", function() {
       /* ── 1. PROJECT DATA ── */
       const projects = {
-        '01': { tag: '2026', 
+        '01': { 
+               tag: '2026', 
                title:'Reconstruct of Future Past', 
                year: 'Multiple Screening', 
                desc: `&emsp;&emsp;In a future Anthropocene era where human activities have irrevocably impacted the global ecosystem, much of life has gone extinct, leaving only small, scattered groups of humans. Ancient lifeforms are resurrected through de-extinction, returning to a new world in forms different from what was once imagined, with the goal of restoring the collapsed biosphere.<br><br>&emsp;&emsp;However, this intervention only compounds the problem, giving rise to a synthetic nature—a new ecological state that humanity can no longer control. The role of the creator is thus shifted to that of an observer, witnessing the very changes they have caused.<br><br>&emsp;&emsp;This work explores the ethics of de-extinction and questions human agency in intervening in natural processes that have already concluded, leading to a world where the line between the natural and the artificial has been irrevocably blurred.`,
                imgPlaceholderColor: '#c8c2b8', 
                showExtra: true, 
-               <img src="images/ROFP3.webp" style="width:100%; display:block;">
+               imgSrc: 'images/ROFP3.webp',
                extraImages: [
-               { type: 'image', src: 'images/ROFP1.webp'},
-               { type: 'image', src: 'images/ROFP2.webp'}, 
-               { type: 'image', src: 'images/ROFP4.webp'}, 
-               { type: 'image', src: 'images/ROFP5.webp'} 
-               
+                 { type: 'image', src: 'images/ROFP1.webp'},
+                 { type: 'image', src: 'images/ROFP2.webp'}, 
+                 { type: 'image', src: 'images/ROFP4.webp'}, 
+                 { type: 'image', src: 'images/ROFP5.webp'} 
                ] 
             },
-        '02': { tag: '2026', 
+        '02': { 
+               tag: '2026', 
                title:'The Impure Air', 
                year: 'Mixed Media', 
                desc: "&emsp;&emsp;An exploration of the PM2.5 crisis in Chiang Mai province, characterized by consistently hazardous pollution levels. The work addresses how this environmental threat impacts the livelihood of locals and causes annual chronic health issues. Furthermore, it serves as a critique of the government's systemic failure in crisis management and its inability to implement sustainable solutions.", 
                imgPlaceholderColor: '#b8b2a8', 
                showExtra: true,
-               <img src="images/Impure1.webp" style="width:100%; display:block;">
+               imgSrc: 'images/Impure1.webp',
                extraImages: [
-                { type: 'image', src: 'images/Impure2.webp'},
-                { type: 'image', src: 'images/Impure3.webp'}, 
-                { type: 'image', src: 'images/Impure4.webp'}
+                 { type: 'image', src: 'images/Impure2.webp'},
+                 { type: 'image', src: 'images/Impure3.webp'}, 
+                 { type: 'image', src: 'images/Impure4.webp'}
                ]
             },
-        '03': { tag: '2025', 
+        '03': { 
+               tag: '2025', 
                title:'STACK TOKYO PERFORMANCE', 
                year: 'Audio-Visual Live Performance', 
                desc: '&emsp;&emsp;A live audio-visual performance combining modular synthesis with real-time generative visuals. Performed at WPÜ HOTEL, Tokyo, Japan.', 
                imgPlaceholderColor: '#e8e3dc', 
                showExtra: true ,
-               <img src="images/Japan1.webp" style="width:100%; display:block;">
+               imgSrc: 'images/Japan1.webp',
                extraMedia: [
-              { type: 'image', src: 'images/Japan2.webp' },
-              { type: 'image', src: 'images/Japan3.webp' }
-            ]
+                 { type: 'image', src: 'images/Japan2.webp' },
+                 { type: 'image', src: 'images/Japan3.webp' }
+             ]
           },
-        '04': { tag: '2024', 
+        '04': { 
+               tag: '2024', 
                title:'Beyond The Relation', 
                year: 'Video Art', 
                desc: '...', 
-               <img src="images/btr1.webp" style="width:100%; display:block;">
+               imgSrc: 'images/btr1.webp',
                imgPlaceholderColor: '#dbd5cc', 
                extraImages: [
-                { type: 'image', src: 'images/btr2.webp'},
-                
-               ]
+                 { type: 'image', src: 'images/btr2.webp'}
+               ],
                youtubeLink: 'https://www.youtube.com/watch?v=J3pbbdLWooI',
-               showExtra: true },
-        
-        '05': { tag: '2024', 
+               showExtra: true 
+            },
+        '05': { 
+               tag: '2024', 
                title:'Sucktoria Robonova', 
                year: 'Interactive Art', 
                desc: '', 
-               <img src="images/Sucktoria.webp" style="width:100%; display:block;">
+               imgSrc: 'images/Sucktoria.webp',
                imgPlaceholderColor: '#d4cfc8', 
-               showExtra: false }
+               showExtra: false 
+            }
       };
 
       /* ── 2. BUILD MASONRY ── */
