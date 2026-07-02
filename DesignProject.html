@@ -692,10 +692,10 @@ nav {
       const d = projects[key];
       if (!d) return;
 
-      panelTag.textContent   = d.tag   || '—';
-      panelTitle.textContent = d.title || '—';
-      panelYear.textContent  = d.year  || '—';
-      panelDesc.innerHTML    = d.desc  || '—';
+      panelTag.textContent   = d.tag   || '';
+      panelTitle.textContent = d.title || '';
+      panelYear.textContent  = d.year  || '';
+      panelDesc.innerHTML    = d.desc  || '';
 
       const imgWrap = document.getElementById('panelImgWrap');
       const hasImg  = d.imgSrc;
